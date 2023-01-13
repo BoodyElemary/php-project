@@ -16,7 +16,7 @@ function get_products_array(products) {
 function fillProducts(productsArr) {
   for (let i = 0; i < productsArr.length; i++) {
     let productsZone = document.getElementById("productsZone");
-
+    let divParent = document.createElement("div");
     let divContainer = document.createElement("div"); ////
     let divHeader = document.createElement("div"); ////
     let imglink = document.createElement("a"); ////
@@ -31,11 +31,12 @@ function fillProducts(productsArr) {
     let addToCartContainer = document.createElement("div"); ////
     let addToCartBtn = document.createElement("button"); ////
 
+    divParent.classList.add("col-xl-3", "col-md-6", "mb-xl-0", "mb-4", "mt-4");
     divContainer.classList.add("card", "card-blog", "card-plain");
     divHeader.classList.add("card-header", "p-0", "mt-n4", "mx-3");
     imglink.classList.add("d-block", "shadow-xl", "border-radius-xl");
     img.setAttribute("src", `${productsArr[i]["product_picture"]}`);
-    img.classList.add("img-fluid", "shadow", "border-radius-xl", "w-25");
+    img.classList.add("img-fluid", "shadow", "border-radius-xl");
     divCardBody.classList.add("card-body", "p-3");
     cardBodyContainer.classList.add(
       "d-flex",
@@ -59,12 +60,12 @@ function fillProducts(productsArr) {
       "btn",
       "btn-primary",
       "btn-sm",
-      "btn-0",
-      "toast-btn"
+      "mb-0",
+      "toast-btn",
+      "customAlert"
     );
     addToCartBtn.innerText = "Add To Cart";
-    addToCartBtn.setAttribute("data-target", "infoToast");
-
+    addToCartBtn.dataset.target = "#infoToast";
     divContainer.appendChild(divHeader);
     divContainer.appendChild(divCardBody);
     divContainer.appendChild(addToCartContainer);
@@ -78,9 +79,54 @@ function fillProducts(productsArr) {
     divNameInfo.appendChild(divCatInfo);
     divCatInfo.appendChild(spanCat);
     addToCartContainer.appendChild(addToCartBtn);
-
-    productsZone.appendChild(divContainer);
+    divParent.appendChild(divContainer);
+    productsZone.appendChild(divParent);
   }
+
+  showToast();
+}
+// set this function for genertaed dom by js
+function showToast() {
+  let btns = document.getElementsByClassName("customAlert");
+  let infoToastDiv = document.getElementById("infoToast");
+  for (let i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", () => {
+      console.log(infoToastDiv);
+      infoToastDiv.classList.add("show");
+      console.log(infoToastDiv);
+      setTimeout(() => {
+        infoToastDiv.classList.remove("show");
+      }, 1200);
+    });
+  }
+}
+
+{
+  /* <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
+                    <div class="card card-blog card-plain">
+                      <div class="card-header p-0 mt-n4 mx-3">
+                        <a class="d-block shadow-xl border-radius-xl">
+                          <img src="https://ibc-static.broad.msu.edu/sites/globaledge/blog/55607.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                        </a>
+                      </div>
+                      <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div>
+                            <h5>Coffe Late</h5>
+                            <div class="tags mb-2">
+                              <span class="badge bg-gradient-info">Hot Drink</span>
+                            </div>
+                          </div>
+                          <span class="fs-4">450 EGP</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end gap-3">
+                          <button type="button" class="btn btn-primary btn-sm mb-0 toast-btn" data-target="infoToast">
+                            add to cart
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div> */
 }
 
 // addToCart();
@@ -138,14 +184,11 @@ function fillProducts(productsArr) {
 
 ///////////////// fetch func. ////////////////////////////////
 async function get_products() {
-  let response = await fetch(
-    "http://localhost/poject/project/php-project/server/Home.php",
-    {
-      method: "GET",
-      // body: product,
-      // headers:
-    }
-  );
+  let response = await fetch("http://localhost/php-project/server/Home.php", {
+    method: "GET",
+    // body: product,
+    // headers:
+  });
   let data = await response.json();
   // console.log(data);
   fillProducts(data);
@@ -161,3 +204,4 @@ get_products();
 // let allprouducts = get_profucts();
 
 // console.log(allprouducts);
+// console.log(infoToast);
