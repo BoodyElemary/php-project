@@ -128,26 +128,24 @@ function addToCart() {
 // console.log(CartDivContainer);
 function fillProductCart(addedProducts) {
   let cartContainer = document.getElementById("cartParent");
-   
 
   console.log(cartContainer);
 }
 
-<div class="d-flex flex-column mt-2 justify-content-center align-items-center">
-              <div class="d-flex justify-content-center align-items-baseline col-12">
-                <div class="col-5"><h6>ice espresso</h6></div>
-                <div class="input-group input-group-outline mx-1">
-                  <input type="number" class="form-control fw-bolder text-warning" onfocus="focused(this)" onfocusout="defocused(this)">
-                </div>
-                <div class="col-3 mx-2"><h6>EGP 2225</h6></div>
-                <div class="col-1">
-                  <button class="btn btn-link text-danger p-0 text-center mt-2 mx-1 fw-bolder">
-                    <i class="material-icons">clear</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
+// <div class="d-flex flex-column mt-2 justify-content-center align-items-center">
+//               <div class="d-flex justify-content-center align-items-baseline col-12">
+//                 <div class="col-5"><h6>ice espresso</h6></div>
+//                 <div class="input-group input-group-outline mx-1">
+//                   <input type="number" class="form-control fw-bolder text-warning" onfocus="focused(this)" onfocusout="defocused(this)">
+//                 </div>
+//                 <div class="col-3 mx-2"><h6>EGP 2225</h6></div>
+//                 <div class="col-1">
+//                   <button class="btn btn-link text-danger p-0 text-center mt-2 mx-1 fw-bolder">
+//                     <i class="material-icons">clear</i>
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
 
 // addToCart();
 // viewProduct();
