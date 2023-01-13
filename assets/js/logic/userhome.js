@@ -96,6 +96,9 @@ function showToast() {
 
 //send datat to cart<===================================
 let addedProducts = [];
+let enterdCartItems = [];
+let arrayCheck = [];
+let avilablityCheck = false;
 let addBtns = document.getElementsByClassName("addToCart");
 function addToCart() {
   for (let i = 0; i < addBtns.length; i++) {
@@ -108,11 +111,85 @@ function addToCart() {
       data["orderdProductName"] = orderdProductName;
       data["orderdProductPrice"] = Number(orderdProductPrice);
       addedProducts.push(data);
-      console.log(addedProducts);
-      fillProductCart(addedProducts[addedProducts.length - 1]);
+      let addedItemToCart = addedProducts[addedProducts.length - 1];
+      // console.log(addedProducts);
+      if (addedProducts.length > 1) {
+        for (let i = 0; i < addedProducts.length; i++) {
+          arrayCheck.push(addedProducts[i]);
+        }
+        arrayCheck.pop();
+        console.log(arrayCheck);
+        for (let i = 0; i < arrayCheck.length; i++) {
+          if (
+            arrayCheck[i]["orderdProductName"] ===
+            addedItemToCart["orderdProductName"]
+          ) {
+            console.log("exist");
+
+            avilablityCheck = true;
+
+            // console.log(targetedInput);
+          }
+          // if (arrayCheck.includes(addedItemToCart) === true) {
+
+          // }
+        }
+
+        if (avilablityCheck === true) {
+          let targetedInput = document.getElementById(
+            `${addedItemToCart["orderdProductName"]}`
+          );
+
+          let counterValue = Number(targetedInput.value);
+          counterValue = counterValue + 1;
+          console.log(counterValue);
+          targetedInput.setAttribute("value", counterValue);
+        }
+
+        if (avilablityCheck === false) {
+          fillProductCart(addedItemToCart);
+          console.log(addedItemToCart);
+          enterdCartItems.push(addedItemToCart);
+        }
+      } else if (addedProducts.length <= 1) {
+        fillProductCart(addedItemToCart);
+        // console.log(addedItemToCart);
+        enterdCartItems.push(addedItemToCart);
+      }
+      // console.log(arrayCheck);
+      // console.log(enterdCartItems);
+      // console.log(addedItemToCart);
+      // console.log(arrayCheck.includes(addedItemToCart));
+      // console.log(addedProducts.pop().includes(addedItemToCart));
+      avilablityCheck = false;
+      // remove item from cart;
+
+      let removeFromCart = document.getElementsByClassName("removeFromCart");
+      for (let i = 0; i < removeFromCart.length; i++) {
+        removeFromCart[i].addEventListener("click", (e) => {
+          let clicked = e.target;
+          console.log(clicked);
+          let container = clicked.parentElement.parentElement.parentElement;
+          console.log(container);
+
+          console.log(arrayCheck);
+          const index = arrayCheck.indexOf(arrayCheck[i]["orderdProductName"]);
+          if (index > -1) {
+            // only splice array when item is found
+          }
+          arrayCheck.splice(0, 1); // 2nd parameter means remove one item only
+          arrayCheck.splice(1, 1); // 2nd parameter means remove one item only
+          console.log(arrayCheck);
+
+          container.remove();
+
+          // avilablityCheck = false;
+        });
+      }
+      console.log(removeFromCart);
     });
   }
-
+  avilablityCheck = false;
   showToast();
 }
 // console.log(addedProducts);
@@ -160,6 +237,10 @@ function fillProductCart(addedProducts) {
   cartInput.setAttribute("type", "number");
   cartInput.setAttribute("onfocus", "focused(this)");
   cartInput.setAttribute("onfocusout", "defocused(this)");
+  cartInput.setAttribute("min", "1");
+  cartInput.setAttribute("value", "1");
+  cartInput.setAttribute("id", `${addedProducts["orderdProductName"]}`);
+  cartInput.style.width = "60px";
   cartPriceDiv.classList.add("col-3", "mx-2");
   cartCancelDiv.classList.add("col-1");
   cartCancelBtn.classList.add(
@@ -170,8 +251,10 @@ function fillProductCart(addedProducts) {
     "text-center",
     "mt-2",
     "mx-1",
-    "fw-bolder"
+    "fw-bolder",
+    "removeFromCart"
   );
+
   cartCancelIcon.classList.add("material-icons");
 
   cartPriceCurrency.innerText = "EPG ";
@@ -191,8 +274,9 @@ function fillProductCart(addedProducts) {
   cartCancelDiv.appendChild(cartCancelBtn);
   cartCancelBtn.appendChild(cartCancelIcon);
 
-  console.log(cartContainer);
+  // console.log(cartContainer);
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 {
