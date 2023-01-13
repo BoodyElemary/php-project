@@ -1,18 +1,6 @@
+///////////////// fill product cards /////////////////////////////
 let productsZone = document.getElementById("productsZone");
 
-//////////////// get products array ///////////////////
-
-function get_products_array(products) {
-  //   for (let j = 0; j < products.length; j++) {
-  //     var product_name = products[j]["product_name"];
-  //     var product_picture = products[j]["product_picture"];
-  //     var product_price = products[j]["product_price"];
-  //     var category_name = products[j]["category_name"];
-  //     console.log(category_name);
-  //   }
-}
-
-///////////////// fill product cards /////////////////////////////
 function fillProducts(productsArr) {
   for (let i = 0; i < productsArr.length; i++) {
     let productsZone = document.getElementById("productsZone");
@@ -85,6 +73,9 @@ function fillProducts(productsArr) {
   }
   addToCart();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // set this function for genertaed dom by js
 function showToast() {
   let btns = document.getElementsByClassName("addToCart");
@@ -101,10 +92,12 @@ function showToast() {
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //send datat to cart<===================================
 let addedProducts = [];
+let addBtns = document.getElementsByClassName("addToCart");
 function addToCart() {
-  let addBtns = document.getElementsByClassName("addToCart");
   for (let i = 0; i < addBtns.length; i++) {
     addBtns[i].addEventListener("click", (e) => {
       let data = {};
@@ -113,39 +106,111 @@ function addToCart() {
       let orderdProductName = parent.firstChild.firstChild.firstChild.innerText;
       let orderdProductPrice = parent.firstChild.lastChild.innerText;
       data["orderdProductName"] = orderdProductName;
-      data["orderdProductPrice"] = orderdProductPrice;
+      data["orderdProductPrice"] = Number(orderdProductPrice);
       addedProducts.push(data);
-      // console.log(addedProducts);
-      fillProductCart(addedProducts);
+      console.log(addedProducts);
+      fillProductCart(addedProducts[addedProducts.length - 1]);
     });
   }
+
   showToast();
 }
+// console.log(addedProducts);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //add items to cart <====================================
 
 // let CartDivContainer = document.getElementById("cartParent");
 // console.log(CartDivContainer);
+
 function fillProductCart(addedProducts) {
+  // let addedProducts = { orderdProductName: "bjshd", orderdProductPrice: 212 };
   let cartContainer = document.getElementById("cartParent");
+
+  let cartContainer2 = document.createElement("div");
+  let cartContainer3 = document.createElement("div"); ////
+  let cartProductDiv = document.createElement("div"); ////
+  let cartProductName = document.createElement("h6"); ////
+  let cartInputDiv = document.createElement("div"); ////
+  let cartInput = document.createElement("input"); /////
+  let cartPriceDiv = document.createElement("div"); ////
+  let cartPriceCurrency = document.createElement("h6"); ////
+  let cartPrice = document.createElement("span"); ////
+  let cartCancelDiv = document.createElement("div"); ////
+  let cartCancelBtn = document.createElement("button"); ////
+  let cartCancelIcon = document.createElement("i"); ////
+
+  cartContainer2.classList.add(
+    "d-flex",
+    "flex-column",
+    "mt-2",
+    "justify-content-center",
+    "align-items-center"
+  );
+  cartContainer3.classList.add(
+    "d-flex",
+    "justify-content-center",
+    "align-items-baseline",
+    "col-12"
+  );
+  cartProductDiv.classList.add("col-5");
+  cartInputDiv.classList.add("input-group", "input-group-outline", "mx-1");
+  cartInput.classList.add("form-control", "fw-bolder", "text-warning");
+  cartInput.setAttribute("type", "number");
+  cartInput.setAttribute("onfocus", "focused(this)");
+  cartInput.setAttribute("onfocusout", "defocused(this)");
+  cartPriceDiv.classList.add("col-3", "mx-2");
+  cartCancelDiv.classList.add("col-1");
+  cartCancelBtn.classList.add(
+    "btn",
+    "btn-link",
+    "text-danger",
+    "p-0",
+    "text-center",
+    "mt-2",
+    "mx-1",
+    "fw-bolder"
+  );
+  cartCancelIcon.classList.add("material-icons");
+
+  cartPriceCurrency.innerText = "EPG ";
+  cartCancelIcon.innerText = "clear";
+  cartProductName.innerText = `${addedProducts["orderdProductName"]}`;
+  cartPrice.innerText = `${addedProducts["orderdProductPrice"]}`;
+  cartContainer.appendChild(cartContainer2);
+  cartContainer2.appendChild(cartContainer3);
+  cartContainer3.appendChild(cartProductDiv);
+  cartProductDiv.appendChild(cartProductName);
+  cartContainer3.appendChild(cartInputDiv);
+  cartInputDiv.appendChild(cartInput);
+  cartContainer3.appendChild(cartPriceDiv);
+  cartPriceDiv.appendChild(cartPriceCurrency);
+  cartPriceCurrency.appendChild(cartPrice);
+  cartContainer3.appendChild(cartCancelDiv);
+  cartCancelDiv.appendChild(cartCancelBtn);
+  cartCancelBtn.appendChild(cartCancelIcon);
 
   console.log(cartContainer);
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// <div class="d-flex flex-column mt-2 justify-content-center align-items-center">
-//               <div class="d-flex justify-content-center align-items-baseline col-12">
-//                 <div class="col-5"><h6>ice espresso</h6></div>
-//                 <div class="input-group input-group-outline mx-1">
-//                   <input type="number" class="form-control fw-bolder text-warning" onfocus="focused(this)" onfocusout="defocused(this)">
-//                 </div>
-//                 <div class="col-3 mx-2"><h6>EGP 2225</h6></div>
-//                 <div class="col-1">
-//                   <button class="btn btn-link text-danger p-0 text-center mt-2 mx-1 fw-bolder">
-//                     <i class="material-icons">clear</i>
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
+{
+  /* <div class="d-flex flex-column mt-2 justify-content-center align-items-center">
+              <div class="d-flex justify-content-center align-items-baseline col-12">
+                <div class="col-5"><h6>ice espresso</h6></div>
+                <div class="input-group input-group-outline mx-1">
+                  <input type="number" class="form-control fw-bolder text-warning" onfocus="focused(this)" onfocusout="defocused(this)">
+                </div>
+                <div class="col-3 mx-2"><h6>EGP<span>2225</span></h6></div>
+                <div class="col-1">
+                  <button class="btn btn-link text-danger p-0 text-center mt-2 mx-1 fw-bolder">
+                    <i class="material-icons">clear</i>
+                  </button>
+                </div>
+              </div>
+            </div> */
+}
 
 // addToCart();
 // viewProduct();
@@ -167,8 +232,8 @@ async function get_products() {
   //             window.open("http://localhost/lab_3/profile.html","_self");
   //         }
 }
-
 get_products();
+
 // let allprouducts = get_profucts();
 
 // console.log(allprouducts);
