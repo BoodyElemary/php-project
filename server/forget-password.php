@@ -13,9 +13,7 @@ $password = $data["password"];
 
 
 ///// RETREIVing FROM DATA ////////////////
-$sql = 'mysql:host=localhost;dbname=cafeteriadb';
 
-$conn = new PDO($sql, 'root', '');
 $query = "SELECT * FROM users WHERE user_email = '$email' ";
 
 $sql = $conn->prepare($query);
