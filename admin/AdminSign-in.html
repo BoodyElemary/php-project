@@ -76,21 +76,61 @@
                     </h4>
                    
                 </div>
-                <div class="card-body">
+               <div class="card-body">
                   <form role="form" class="text-start">
                     <div class="input-group input-group-outline my-3">
                       <label class="form-label">Email</label>
-                      <input type="email" class="form-control" />
+                      <input type="email" class="form-control" id="email" />
                     </div>
+                    <p
+                    style="
+                      display: none;
+                      color: rgb(197, 12, 12);
+                      font-size: 13px;
+                    "
+                    id="emailrequired"
+                  >
+                    *E-mail required
+                  </p>
+                  <p
+                  style="
+                    display: none;
+                    color: rgb(197, 12, 12);
+                    font-size: 13px;
+                  "
+                  id="emailinvalid"
+                >
+                  *E-mail Invalid
+                </p>
                     <div class="input-group input-group-outline mb-3">
                       <label class="form-label">Password</label>
-                      <input type="password" class="form-control" />
+                      <input type="password" class="form-control" id="password" />
                     </div>
-
+                    <p
+                    style="
+                      display: none;
+                      color: rgb(197, 12, 12);
+                      font-size: 13px;
+                    "
+                    id="passwordrequired"
+                  >
+                    *Password required
+                  </p>
+                  <p
+                  style="
+                    display: none;
+                    color: rgb(197, 12, 12);
+                    font-size: 13px;
+                  "
+                  id="passwordinvalid"
+                >
+                *Password Invalid
+                </p>
                     <div class="text-center">
                       <button
                         type="button"
                         class="btn bg-gradient-info w-100 my-4 mb-2"
+                        id="signin"
                       >
                         Sign in
                       </button>
@@ -104,10 +144,33 @@
         </div>
       </div>
     </main>
+    <div
+    class="toast fade hide p-2 mt-2 bg-white"
+    role="alert"
+    aria-live="assertive"
+    id="dangerToast"
+    aria-atomic="true"
+    style="position: absolute; top: 81%"
+  >
+    <div class="toast-header border-0">
+      <i class="material-icons text-danger me-2"> campaign </i>
+      <span class="me-auto text-gradient text-danger font-weight-bold fs-5"
+        >Error!!!
+      </span>
+      <i
+        class="fas fa-times text-md ms-3 cursor-pointer"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></i>
+    </div>
+    <hr class="horizontal dark m-0" />
+    <div class="toast-body text-danger" id="errormsg"></div>
+  </div>
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
     <!--   Logic JS Files   -->
+    <script src="../assets/js/logic/Admin_Sign_In.js"></script>
   </body>
 </html>
