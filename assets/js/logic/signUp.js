@@ -11,21 +11,21 @@ let errorToastBody = document.getElementById("dangerToast");
 
 ////////// GRABBING WARNING MSGS //////////////////////////
 let warningMsg = document.getElementById("warningmsg");
-var usernameRequired = document.getElementById("usernameRequired");
-var usernameInvalid = document.getElementById("usernameInvalid");
-var emailRequired = document.getElementById("emailRequired");
-var emailInvalid = document.getElementById("emailInvalid");
-var invalidpassword = document.getElementById("invalidpassword");
-var requiredpassword = document.getElementById("requiredpassword");
-var roomrequired = document.getElementById("roomrequired");
-var roominvalid = document.getElementById("invalidroom");
-var imagerequired = document.getElementById("picrequired");
+let usernameRequired = document.getElementById("usernameRequired");
+let usernameInvalid = document.getElementById("usernameInvalid");
+let emailRequired = document.getElementById("emailRequired");
+let emailInvalid = document.getElementById("emailInvalid");
+let invalidpassword = document.getElementById("invalidpassword");
+let requiredpassword = document.getElementById("requiredpassword");
+let roomrequired = document.getElementById("roomrequired");
+let roominvalid = document.getElementById("invalidroom");
+let imagerequired = document.getElementById("picrequired");
 
 ////////// NAME VALIDATION ////////////////////////////////
 
-var testUser = 0;
+let testUser = 0;
 
-var nameTrue = nameField.addEventListener("input", function () {
+let nameTrue = nameField.addEventListener("input", function () {
   if (nameField.value != "" && /^[a-zA-Z]+$/.test(nameField.value) == true) {
     usernameInvalid.style.display = "none";
     usernameRequired.style.display = "none";
@@ -40,10 +40,10 @@ var nameTrue = nameField.addEventListener("input", function () {
 });
 
 //////// EMAIL VALIDATION ////////////////////////////////////
-var testMail = 0;
+let testMail = 0;
 const regx =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-var mailTrue = emailField.addEventListener("input", function () {
+let mailTrue = emailField.addEventListener("input", function () {
   if (regx.test(emailField.value) == true) {
     emailRequired.style.display = "none";
     emailInvalid.style.display = "none";
@@ -60,8 +60,8 @@ var mailTrue = emailField.addEventListener("input", function () {
 });
 
 //////// PASSWORD VALIDATION ////////////////////////////////
-var testPass = 0;
-var passTrue = passwordField.addEventListener("input", function () {
+let testPass = 0;
+let passTrue = passwordField.addEventListener("input", function () {
   if (passwordField.value.length >= 8) {
     invalidpassword.style.display = "none";
     requiredpassword.style.display = "none";
@@ -87,7 +87,7 @@ passwordConfirmField.addEventListener("input", function () {
 
 //////// ROOM VALIDATION ////////////////////////////////
 let testroom = 0;
-var roomTrue = roomNumberField.addEventListener("input", function () {
+let roomTrue = roomNumberField.addEventListener("input", function () {
   if (roomNumberField.value.length != 3) {
     roominvalid.style.display = "block";
     roomrequired.style.display = "none";
@@ -105,7 +105,7 @@ var roomTrue = roomNumberField.addEventListener("input", function () {
 
 //////// IMAGE VALIDATION ///////////////////////////////
 let testimage = 0;
-var imageTrue = imageField.addEventListener("input", function () {
+let imageTrue = imageField.addEventListener("input", function () {
   if (imageField.value == "") {
     imagerequired.style.display = "block";
     testimage = 0;

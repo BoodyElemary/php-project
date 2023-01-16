@@ -4,10 +4,100 @@ let emailField = document.getElementById("email");
 let roomNumberField = document.getElementById("roomnumber");
 let passwordField = document.getElementById("newpassword");
 let passwordConfirmField = document.getElementById("passwordconfirmation");
-let warningMsg = document.getElementById("warningmsg");
 let changePassword = document.getElementById("changepassword");
 let errorToastText = document.getElementById("errormsg");
 let errorToastBody = document.getElementById("dangerToast");
+
+////////// GRABBING WARNING MSGS //////////////////////////
+let warningMsg = document.getElementById("warningmsg");
+let usernameRequired = document.getElementById("usernameRequired");
+let usernameInvalid = document.getElementById("usernameInvalid");
+let emailRequired = document.getElementById("emailRequired");
+let emailInvalid = document.getElementById("emailInvalid");
+let invalidpassword = document.getElementById("invalidpassword");
+let requiredpassword = document.getElementById("requiredpassword");
+let roomrequired = document.getElementById("roomrequired");
+let roominvalid = document.getElementById("invalidroom");
+
+// console.log(warningMsg);
+// console.log(usernameRequired);
+// console.log(usernameInvalid);
+// console.log(emailRequired);
+// console.log(emailInvalid);
+// console.log(invalidpassword);
+// console.log(requiredpassword);
+// console.log(roomrequired);
+// console.log(roominvalid);
+
+////////// NAME VALIDATION ////////////////////////////////
+
+let testUser = 0;
+
+let nameTrue = nameField.addEventListener("input", function () {
+  if (nameField.value != "" && /^[a-zA-Z]+$/.test(nameField.value) == true) {
+    usernameInvalid.style.display = "none";
+    usernameRequired.style.display = "none";
+    testUser = 1;
+  } else if (/^[a-zA-Z]+$/.test(nameField.value) == false) {
+    usernameInvalid.style.display = "block";
+    testUser = 0;
+  } else {
+    usernameRequired.style.display = "block";
+    testUser = 0;
+  }
+});
+
+//////// EMAIL VALIDATION ////////////////////////////////////
+let testMail = 0;
+const regx =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+let mailTrue = emailField.addEventListener("input", function () {
+  if (regx.test(emailField.value) == true) {
+    emailRequired.style.display = "none";
+    emailInvalid.style.display = "none";
+    testMail = 1;
+    return true;
+  } else if (emailField.value != "" && regx.test(emailField.value) == false) {
+    emailRequired.style.display = "none";
+    emailInvalid.style.display = "block";
+    testMail = 0;
+  } else {
+    testMail = 0;
+    return false;
+  }
+});
+
+//////// ROOM VALIDATION ////////////////////////////////
+let testroom = 0;
+let roomTrue = roomNumberField.addEventListener("input", function () {
+  if (roomNumberField.value.length != 3) {
+    roominvalid.style.display = "block";
+    roomrequired.style.display = "none";
+    testroom = 0;
+  } else if (roomNumberField.value.length == 0) {
+    roomrequired.style.display = "block";
+    testroom = 0;
+  } else {
+    roominvalid.style.display = "none";
+    roomrequired.style.display = "none";
+
+    testroom = 1;
+  }
+});
+
+//////// PASSWORD VALIDATION ////////////////////////////////
+let testPass = 0;
+let passTrue = passwordField.addEventListener("input", function () {
+  if (passwordField.value.length >= 8) {
+    invalidpassword.style.display = "none";
+    requiredpassword.style.display = "none";
+    testPass = 1;
+  } else {
+    invalidpassword.style.display = "block";
+    requiredpassword.style.display = "none";
+    testPass = 0;
+  }
+});
 
 ////// password confirm //////////////////////////
 passwordConfirmField.addEventListener("keyup", function () {
@@ -18,6 +108,7 @@ passwordConfirmField.addEventListener("keyup", function () {
   }
 });
 
+///////// FIRING ERROR /////////////////////////
 function showToast(data) {
   errorToastText.innerText = data["msg"];
   errorToastBody.classList.add("show");
@@ -39,7 +130,15 @@ changePassword.addEventListener("click", (e) => {
   let confirmedPassword = passwordConfirmField.value;
 
   /////// CONFIRMATION BEFORE SUMBIT ////////////////////
-  if (password != confirmedPassword) {
+  if (testUser == 0) {
+    usernameRequired.style.display = "block";
+  } else if (testMail == 0) {
+    emailRequired.style.display = "block";
+  } else if (testPass == 0) {
+    requiredpassword.style.display = "block";
+  } else if (testroom == 0) {
+    roomrequired.style.display = "block";
+  } else if (password != confirmedPassword) {
     warningMsg.style.display = "block";
   } else {
     // CREATING JSON//////////////////////////////

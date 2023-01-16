@@ -33,7 +33,12 @@ if (!empty($users)) {
 
 
     ////// VALIDATION BEFORE UPADTING PASSWORD //////////////////
-    if ($email == $retrieved_email) {
+    if(strlen($password)<8)
+    {
+        $outMsg = "Invalid Password";
+        echo json_encode(["error" => true, "msg" => "$outMsg"]);
+    }
+    else if ($email == $retrieved_email) {
         if (($name == $retrieved_name) && ($roomNumber == $retrieved_room)) {
             $query = "UPDATE users SET user_password = '$password' WHERE user_email = '$email' ";
             $sql = $conn->prepare($query);
