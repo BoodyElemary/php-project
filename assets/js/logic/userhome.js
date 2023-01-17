@@ -1,4 +1,15 @@
-///////////////// fill product cards /////////////////////////////
+/////////////////// >>> SHOWING USER INFO <<< ///////////////////////////
+//====== grabbing elenemts:
+let userName_field = document.getElementById("userName");
+let userImage_field = document.getElementById("userImage");
+
+//===== inserting user info :
+function fillUserInfo(userArr) {
+  userName_field.innerText = userArr[0]["user_name"];
+  userImage_field.src = userArr[0]["user_pic"];
+}
+
+///////////////////////////////////// >>> FILL PRODUCT CARDS <<< /////////////////////////////
 let productsZone = document.getElementById("productsZone");
 
 function fillProducts(productsArr) {
@@ -35,7 +46,7 @@ function fillProducts(productsArr) {
     divCatInfo.classList.add("tags", "mb-2");
     spanCat.classList.add("badge", "bg-gradient-info");
     spanCat.innerText = `${productsArr[i]["category_name"]}`;
-    spanPrice.classList.add("fs-4");
+    spanPrice.classList.add("fs-4", "product-price");
     spanPrice.innerText = `${productsArr[i]["product_price"]}`;
     addToCartContainer.classList.add(
       "d-flex",
@@ -74,7 +85,7 @@ function fillProducts(productsArr) {
   addToCart();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// >>> SHOW TOAST <<< ///////////////////////////////////////////////////////////
 
 // set this function for genertaed dom by js
 function showToast() {
@@ -82,9 +93,7 @@ function showToast() {
   let infoToastDiv = document.getElementById("infoToast");
   for (let i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", () => {
-      // console.log(infoToastDiv);
       infoToastDiv.classList.add("show");
-      // console.log(infoToastDiv);
       setTimeout(() => {
         infoToastDiv.classList.remove("show");
       }, 1200);
@@ -94,11 +103,18 @@ function showToast() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//send datat to cart<===================================
+//////////////// >>>> ADD TO CART <<<< ////////////
+
+// ======== ARRAYS:
 let addedProducts = [];
 let enterdCartItems = [];
 let arrayCheck = [];
 let avilablityCheck = false;
+// === for prices in cart :
+let pricesInCartArr = [];
+// ===============
+// console.log(pricesInCartArr);
+
 let addBtns = document.getElementsByClassName("addToCart");
 function addToCart() {
   for (let i = 0; i < addBtns.length; i++) {
@@ -111,20 +127,25 @@ function addToCart() {
       data["orderdProductName"] = orderdProductName;
       data["orderdProductPrice"] = Number(orderdProductPrice);
       addedProducts.push(data);
+
+      // ======= for prices in cart ======
+
+      // ==================================
+
       let addedItemToCart = addedProducts[addedProducts.length - 1];
       // console.log(addedProducts);
-      if (addedProducts.length > 1) {
+      if (addedProducts.length >= 1) {
         for (let i = 0; i < addedProducts.length; i++) {
           arrayCheck.push(addedProducts[i]);
         }
         arrayCheck.pop();
-        console.log(arrayCheck);
+        // console.log(arrayCheck);
         for (let i = 0; i < arrayCheck.length; i++) {
           if (
             arrayCheck[i]["orderdProductName"] ===
             addedItemToCart["orderdProductName"]
           ) {
-            console.log("exist");
+            // console.log("exist");
 
             avilablityCheck = true;
 
@@ -139,19 +160,18 @@ function addToCart() {
           let targetedInput = document.getElementById(
             `${addedItemToCart["orderdProductName"]}`
           );
-
-          let counterValue = Number(targetedInput.value);
+          let counterValue = parseInt(targetedInput.value);
           counterValue = counterValue + 1;
-          console.log(counterValue);
+          // console.log(counterValue);
           targetedInput.setAttribute("value", counterValue);
         }
 
         if (avilablityCheck === false) {
           fillProductCart(addedItemToCart);
-          console.log(addedItemToCart);
+          // console.log(addedItemToCart);
           enterdCartItems.push(addedItemToCart);
         }
-      } else if (addedProducts.length <= 1) {
+      } else if (addedProducts.length == 0) {
         fillProductCart(addedItemToCart);
         // console.log(addedItemToCart);
         enterdCartItems.push(addedItemToCart);
@@ -168,41 +188,64 @@ function addToCart() {
       for (let i = 0; i < removeFromCart.length; i++) {
         removeFromCart[i].addEventListener("click", (e) => {
           let clicked = e.target;
-          console.log(clicked);
+          // console.log(clicked);
           let container = clicked.parentElement.parentElement.parentElement;
-          console.log(container);
+          let itemName = container.firstChild.firstChild.innerText;
+          // console.log(container);
+          // console.log(itemName);
 
-          console.log(arrayCheck);
-          const index = arrayCheck.indexOf(arrayCheck[i]["orderdProductName"]);
-          if (index > -1) {
-            // only splice array when item is found
+          let addedProductsLength = addedProducts.length;
+          // console.log(arrChecksLength);
+          while (addedProductsLength--) {
+            let index2 = arrayCheck
+              .map((object) => object.orderdProductName)
+              .indexOf(itemName);
+
+            // console.log(index);
+            if (index2 > -1) {
+              addedProducts.splice(index2, 1);
+            }
           }
-          arrayCheck.splice(0, 1); // 2nd parameter means remove one item only
-          arrayCheck.splice(1, 1); // 2nd parameter means remove one item only
-          console.log(arrayCheck);
 
+          let arrChecksLength = arrayCheck.length;
+          // console.log(arrChecksLength);
+          while (arrChecksLength--) {
+            let index = arrayCheck
+              .map((object) => object.orderdProductName)
+              .indexOf(itemName);
+
+            // console.log(index);
+            if (index > -1) {
+              arrayCheck.splice(index, 1);
+            }
+          }
+          // console.log(arrChecksLength);
+          let index1 = enterdCartItems
+            .map((object) => object.orderdProductName)
+            .indexOf(itemName);
+
+          // console.log(index);
+          console.log(enterdCartItems);
+          if (index1 > -1) {
+            enterdCartItems.splice(index1, 1);
+          }
           container.remove();
+          console.log(arrayCheck);
 
           // avilablityCheck = false;
         });
       }
-      console.log(removeFromCart);
+      // changeTotal();
     });
   }
-  avilablityCheck = false;
   showToast();
 }
-// console.log(addedProducts);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //add items to cart <====================================
 
-// let CartDivContainer = document.getElementById("cartParent");
-// console.log(CartDivContainer);
-
 function fillProductCart(addedProducts) {
-  // let addedProducts = { orderdProductName: "bjshd", orderdProductPrice: 212 };
   let cartContainer = document.getElementById("cartParent");
 
   let cartContainer2 = document.createElement("div");
@@ -233,7 +276,12 @@ function fillProductCart(addedProducts) {
   );
   cartProductDiv.classList.add("col-5");
   cartInputDiv.classList.add("input-group", "input-group-outline", "mx-1");
-  cartInput.classList.add("form-control", "fw-bolder", "text-warning");
+  cartInput.classList.add(
+    "form-control",
+    "fw-bolder",
+    "text-warning",
+    "inputs"
+  );
   cartInput.setAttribute("type", "number");
   cartInput.setAttribute("onfocus", "focused(this)");
   cartInput.setAttribute("onfocusout", "defocused(this)");
@@ -254,6 +302,7 @@ function fillProductCart(addedProducts) {
     "fw-bolder",
     "removeFromCart"
   );
+  cartPrice.classList.add("cartPriceNumber");
 
   cartCancelIcon.classList.add("material-icons");
 
@@ -274,27 +323,9 @@ function fillProductCart(addedProducts) {
   cartCancelDiv.appendChild(cartCancelBtn);
   cartCancelBtn.appendChild(cartCancelIcon);
 
-  // console.log(cartContainer);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-{
-  /* <div class="d-flex flex-column mt-2 justify-content-center align-items-center">
-              <div class="d-flex justify-content-center align-items-baseline col-12">
-                <div class="col-5"><h6>ice espresso</h6></div>
-                <div class="input-group input-group-outline mx-1">
-                  <input type="number" class="form-control fw-bolder text-warning" onfocus="focused(this)" onfocusout="defocused(this)">
-                </div>
-                <div class="col-3 mx-2"><h6>EGP<span>2225</span></h6></div>
-                <div class="col-1">
-                  <button class="btn btn-link text-danger p-0 text-center mt-2 mx-1 fw-bolder">
-                    <i class="material-icons">clear</i>
-                  </button>
-                </div>
-              </div>
-            </div> */
-}
 
 // addToCart();
 // viewProduct();
@@ -307,18 +338,89 @@ async function get_products() {
     // headers:
   });
   let data = await response.json();
-  // console.log(data);
-  fillProducts(data);
-  // return data;
-
-  // if(data['status']==true){
-  //             // window.location="./profile.html"
-  //             window.open("http://localhost/lab_3/profile.html","_self");
-  //         }
+  console.log(data);
+  fillProducts(data["products"]);
+  fillUserInfo(data["user"]);
+  // let x = 5;
+  // if (x == 5) {
+  //   // window.location = "http://localhost/php-project/user_pages/sign-in.html";
+  //   console.log("should be redirected");
+  // }
 }
 get_products();
 
-// let allprouducts = get_profucts();
+function changeTotal() {
+  let prices = document.getElementsByClassName("cartPriceNumber");
+  let totalPay = document.getElementById("totalPay").innerText;
+  let Total = Number(totalPay);
+  let itemsCount = document.getElementsByClassName("inputs");
+  for (let i = 0; i < prices.length; i++) {
+    let itemCart = prices[i].parentElement.parentElement.parentElement;
+    // console.log(itemsCount[i].value);
+    // Total = Total + parseInt(prices[prices.length - 1].innerText);
+    // console.log(Total);
 
-// console.log(allprouducts);
-// console.log(infoToast);
+    let beforeInputStep = Number(itemsCount[i].value);
+    itemsCount[i].addEventListener("change", () => {
+      // console.log(beforeInputStep);
+      let itemNo = Number(itemsCount[i].value);
+      let price = Number(prices[i].innerText);
+      let itemsInCart_Data = {};
+
+      itemsInCart_Data["name"] = itemCart.firstChild.firstChild.innerText;
+
+      // console.log(itemNo);
+      // console.log(price);
+      // console.log(Total);
+      if (beforeInputStep < itemNo) {
+        Total = 0;
+        Total += itemNo * price;
+        itemsInCart_Data["price"] = Total;
+      } else if (beforeInputStep > itemNo) {
+        Total = 0;
+        Total += itemNo * price;
+        itemsInCart_Data["price"] = Total;
+      }
+
+      if (pricesInCartArr.length === 0) {
+        pricesInCartArr.push(itemsInCart_Data);
+      } else {
+        for (let i = 0; i < pricesInCartArr.length; i++) {
+          if (
+            pricesInCartArr[i]["name"] ==
+            itemCart.firstChild.firstChild.innerText
+          ) {
+            console.log("first");
+            pricesInCartArr[i]["price"] = Total;
+          } else {
+            console.log("second");
+            pricesInCartArr.push(itemsInCart_Data);
+          }
+        }
+      }
+
+      console.log(pricesInCartArr);
+      totalPay = document.getElementById("totalPay");
+      totalPay.innerText = Total;
+      beforeInputStep = Number(itemsCount[i].value);
+    });
+  }
+  // console.log(prices);
+}
+changeTotal();
+
+function initiatOrder() {
+  let confimBtn = document.getElementById("confirmBtn");
+  let itemsCount = document.getElementsByClassName("inputs");
+  confimBtn.addEventListener("click", () => {
+    console.log("first");
+    console.log(enterdCartItems);
+    for (let i = 0; i < itemsCount.length; i++) {
+      // console.log(itemsCount[i].value);
+      enterdCartItems[i].productsCount = parseInt(itemsCount[i].value);
+    }
+    console.log(enterdCartItems);
+  });
+}
+
+initiatOrder();

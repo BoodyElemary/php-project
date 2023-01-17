@@ -81,7 +81,7 @@ if(isset($_FILES['image']))
             else
             {
                 ///// INSERTING IN DATABASE ////////////////////////////
-                $query = "INSERT INTO users (user_name,user_email,user_password,user_pic,user_room) VALUES ('$username','$email','$password','$new_name','$roomNo') ";
+                $query = "INSERT INTO users (user_name,user_email,user_password,user_pic,user_room) VALUES ('$username','$email','$password','../server/users_images/' "." '$new_name','$roomNo') ";
                 $sql = $conn->prepare($query);
                 $sql->execute();
                 echo json_encode(["status" => true]);
