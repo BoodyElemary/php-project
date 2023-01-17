@@ -4,10 +4,18 @@ session_start();
 require("./env.php");
 
 
-if($_SESSION['email'])
+if(!$_SESSION)
+{
+    $response = [
+        "error" => true,
+    ];
+    echo json_encode($response);
+}
+else
 {
     $email = $_SESSION['email'];
-}
+
+
 
 ///////////////// get products ////////////////////////////////
 
@@ -30,8 +38,7 @@ if ($result_1 && $result_2 ) {
         "user" => $user
     ];
     echo json_encode($response);
-    // echo json_encode($products);
 }
-// print_r($product);
+}
 
-// echo "dddddddddddddddddddd";
+// session_destroy();  

@@ -1,4 +1,15 @@
-///////////////// fill product cards /////////////////////////////
+/////////////////// >>> SHOWING USER INFO <<< ///////////////////////////
+//====== grabbing elenemts:
+let userName_field = document.getElementById("userName");
+let userImage_field = document.getElementById("userImage");
+
+//===== inserting user info :
+function fillUserInfo(userArr) {
+  userName_field.innerText = userArr[0]["user_name"];
+  userImage_field.src = userArr[0]["user_pic"];
+}
+
+///////////////////////////////////// >>> FILL PRODUCT CARDS <<< /////////////////////////////
 let productsZone = document.getElementById("productsZone");
 
 function fillProducts(productsArr) {
@@ -74,7 +85,7 @@ function fillProducts(productsArr) {
   addToCart();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// >>> SHOW TOAST <<< ///////////////////////////////////////////////////////////
 
 // set this function for genertaed dom by js
 function showToast() {
@@ -82,9 +93,7 @@ function showToast() {
   let infoToastDiv = document.getElementById("infoToast");
   for (let i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", () => {
-      // console.log(infoToastDiv);
       infoToastDiv.classList.add("show");
-      // console.log(infoToastDiv);
       setTimeout(() => {
         infoToastDiv.classList.remove("show");
       }, 1200);
@@ -104,7 +113,7 @@ let avilablityCheck = false;
 // === for prices in cart :
 let pricesInCartArr = [];
 // ===============
-console.log(pricesInCartArr);
+// console.log(pricesInCartArr);
 
 let addBtns = document.getElementsByClassName("addToCart");
 function addToCart() {
@@ -226,8 +235,6 @@ function addToCart() {
           // avilablityCheck = false;
         });
       }
-
-      // console.log(removeFromCart);
       // changeTotal();
     });
   }
@@ -238,11 +245,7 @@ function addToCart() {
 
 //add items to cart <====================================
 
-// let CartDivContainer = document.getElementById("cartParent");
-// console.log(CartDivContainer);
-
 function fillProductCart(addedProducts) {
-  // let addedProducts = { orderdProductName: "bjshd", orderdProductPrice: 212 };
   let cartContainer = document.getElementById("cartParent");
 
   let cartContainer2 = document.createElement("div");
@@ -320,7 +323,6 @@ function fillProductCart(addedProducts) {
   cartCancelDiv.appendChild(cartCancelBtn);
   cartCancelBtn.appendChild(cartCancelIcon);
 
-  // console.log(cartContainer);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -336,14 +338,14 @@ async function get_products() {
     // headers:
   });
   let data = await response.json();
-  // console.log(data);
+  console.log(data);
   fillProducts(data["products"]);
-  // return data;
-
-  // if(data['status']==true){
-  //             // window.location="./profile.html"
-  //             window.open("http://localhost/lab_3/profile.html","_self");
-  //         }
+  fillUserInfo(data["user"]);
+  // let x = 5;
+  // if (x == 5) {
+  //   // window.location = "http://localhost/php-project/user_pages/sign-in.html";
+  //   console.log("should be redirected");
+  // }
 }
 get_products();
 
