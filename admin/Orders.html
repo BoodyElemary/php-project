@@ -187,9 +187,9 @@
                   class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"
                 >
                   <div
-                    class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                    class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" id="userNameParent"
                   >
-                    <h6 class="text-white text-capitalize ps-3">
+                    <h6 class="text-white text-capitalize ps-3" id="userName">
                      Abdelrahman Orders
                     </h6>
                   </div>
@@ -231,9 +231,9 @@
                             <div class="d-flex px-2 py-1">
                               <div class="d-flex px-2 py-1">
                                   <div
-                                    class="d-flex flex-row justify-content-center align-items-baseline"
+                                    class="d-flex flex-row justify-content-center align-items-baseline" id="orderDateParent"
                                   >
-                                    <h6 class="mb-0 text-sm">01/13/2023, 06:39 PM</h6>
+                                    <h6 class="mb-0 text-sm" id="orderDate">01/13/2023, 06:39 PM</h6>
                                   </div>
                                 </div>
                             </div>
@@ -245,15 +245,15 @@
                           </td>
 
                           <td>
-                            <p class="text-xs font-weight-bold mb-0">
-                               <span >207</span>
+                            <p class="text-xs font-weight-bold mb-0" id="roomNumberParent">
+                               <span id="roomNumber" >207</span>
                             </p>
                           </td>
 
                           <td>
                             <div class="input-group input-group-outline  w-50">
                                 <select class="form-control fw-bolder text-warning" id="user room" style="border-radius: 0 !important" aria-placeholder="select-user">
-                                  <option value="" disabled="" selected="">status</option>
+                                  <option value="" disabled="" selected="" id="orderStatus">status</option>
               
                                   <option>avilable</option>
                                   <option>not avilable</option>
@@ -271,25 +271,25 @@
                 <div class="card-body px-0 pb-2">
                   <div class="row">
                     <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
-                      <div class="card card-blog card-plain w-md-75">
-                        <div class="card-header p-0 mt-n4 mx-3">
+                      <div class="card card-blog card-plain w-md-75" id="wholeCard_container">
+                        <div class="card-header p-0 mt-n4 mx-3" id="upperCard_div" >
                           <a class="d-block shadow-xl border-radius-xl">
-                            <img src="https://ibc-static.broad.msu.edu/sites/globaledge/blog/55607.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl position-relative">
+                            <img src="https://ibc-static.broad.msu.edu/sites/globaledge/blog/55607.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl position-relative" id="productImage">
                             <span class="position-absolute top-20 start-75 translate-middle badge rounded-pill bg-warning p-2">
-                              x <span id="Itemscount">9</span>
+                              x <span id="productCount">9</span>
                               <span class="visually-hidden">unread messages</span>
                             </span>
                           </a>
                         </div>
-                        <div class="card-body p-3">
+                        <div class="card-body p-3" id="bottomCard_div">
                           <div class="d-flex align-items-center justify-content-between">
                             <div>
-                              <h5>Coffe Late</h5>
+                              <h5 id="productName">Coffe Late</h5>
                               <div class="tags mb-2">
-                                <span class="badge bg-gradient-info">Hot Drink</span>
+                                <span class="badge bg-gradient-info" id="productCategory">Hot Drink</span>
                               </div>
                             </div>
-                            <span class="fs-4">450 EGP</span>
+                            <span class="fs-4" id="productPrice">450 EGP</span>
                           </div>
                         </div>
                       </div>
@@ -307,5 +307,6 @@
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
     <!--   Logic JS Files   -->
+    <script src="../assets/js/logic/orders.js"></script>
   </body>
 </html>
