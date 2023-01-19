@@ -1,8 +1,10 @@
 // ===== parent element to append to:
 let wholeOrderDiv = document.getElementById("wholeOrderDiv");
-/*
- *
- */
+//---- grabbing elements for functions
+let logout_Btn = document.getElementById("logoutBtn");
+//---- elemnts for admin data
+let adminName = document.getElementById("adminName");
+let adminImage = document.getElementById("adminImage");
 
 ///////////////////////////////////// >>> FILL ORDER FIELD <<< /////////////////////////////
 let product_loop_begin = 0; // index to start looping for product on
@@ -102,7 +104,7 @@ function fill_Orders(OrdersArray) {
                     <th
                       class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                     >
-                      <h6>Name</h6>
+                      <h6>Total</h6>
                     </th>
                     <th
                       class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
@@ -150,11 +152,12 @@ function fill_Orders(OrdersArray) {
                           id="statuSelection"
                           style="border-radius: 0 !important"
                           aria-placeholder="select-user"
-                          onchange=lolo()
+                          onchange=change_status(this)
+                          onclick=get_current_value(this)
                         >
-                          <option value="progress" ${selected1}>progress</option>
-                          <option value="out for delivery" ${selected2}>out for delivery</option>
-                          <option value="delivered" ${selected3}>delivered</option>
+                          <option class = "opt" value="progress" ${selected1}>progress</option>
+                          <option class = "opt" value="out for delivery" ${selected2}>out for delivery</option>
+                          <option class = "opt" value="delivered" ${selected3}>delivered</option>
                         </select>
                       </div>
                     </td>
@@ -175,26 +178,84 @@ function fill_Orders(OrdersArray) {
 async function get_Orders() {
   let response = await fetch("http://localhost/php-project/server/Orders.php", {
     method: "GET",
-    // body: product,
-    // headers:
   });
   let data = await response.json();
-  // console.log(data);
-
-  fill_Orders(data);
-  // fill_cards(data["products"]);
-  // if(data['status']==true){
-  //             // window.location="./profile.html"
-  //             window.open("http://localhost/lab_3/profile.html","_self");
-  //         }
+  console.log(data);
+  if (data["notAuthorized"] == true) {
+    window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+  } else {
+    fill_Orders(data);
+    admin_data(data);
+  }
 }
 get_Orders();
 
-function alerrt() {
-  alert("ttttttttt");
+//////////////////////////////// LOUGOUT FUNCTION ////////////////////////////////////
+logout_Btn.addEventListener("click", async function () {
+  let formData = new FormData();
+  formData.append("logout", true);
+  let logoutSent = await fetch(
+    "http://localhost/php-project/server/Admin_Sign_In.php",
+    {
+      method: "post",
+      body: formData,
+    }
+  );
+  let logoutResponse = await logoutSent.json();
+  if (logoutResponse["loggedout"] == true) {
+    window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+  }
+});
+
+///////////////// changing order status ////////////////////////////////
+//----- get current state
+let currentState;
+function get_current_value(state) {
+  currentState = state.value;
 }
 
-function lolo() {
-  for (let i = 0; i < statuSelection.length; i++)
-    alert(statuSelection[i].value);
+//------ changing the state
+function change_status(status) {
+  //------- all values in order
+  let options = status.children;
+  let values = [];
+  for (let i = 0; i < options.length; i++) {
+    values.push(options[i].value);
+  }
+
+  //------- gathering order info
+  let newState = status.value;
+  if (values.indexOf(newState) == values.indexOf(currentState)) {
+    alert("Choose Next State");
+    newState = currentState;
+  } else if (values.indexOf(newState) < values.indexOf(currentState)) {
+    alert("You can NOT goback to previous status");
+    status.value = currentState;
+  } else {
+    let targetOrder =
+      status.parentElement.parentElement.parentElement.firstElementChild
+        .firstElementChild.firstElementChild.firstElementChild.firstElementChild
+        .innerText;
+
+    //------- sending new data
+    async function set_Status() {
+      let formData = new FormData();
+      formData.append("status", newState);
+      formData.append("targetOrder", targetOrder);
+      let sendStatus = await fetch(
+        "http://localhost/php-project/server/Orders.php",
+        {
+          method: "post",
+          body: formData,
+        }
+      );
+    }
+    set_Status();
+  }
+}
+
+//////////////////////// fill admin data ////////////////////////////
+function admin_data(array) {
+  adminName.innerText = array["admin"]["admin_name"];
+  adminImage.src = array["admin"]["admin_pic"];
 }
