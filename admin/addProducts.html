@@ -32,6 +32,18 @@
       href="../assets/css/material-dashboard.min.css"
       rel="stylesheet"
     />
+
+    <style>
+      #server-msg{
+        display: none;
+        background-color: #f6caca;
+        padding: 10px;
+        color: red;
+        font-size: 20px;
+        font-weight: 500;
+        /* color: #397e5e; */
+      }
+    </style>
   </head>
   <body class="g-sidenav-show bg-gray-200">
     <!-- Navbar -->
@@ -155,16 +167,7 @@
             </li>
             <li class="nav-item px-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0">
-                <i
-                  class="fa fa-shopping-cart fixed-plugin-button-nav cursor-pointer"
-                >
-                  <span
-                    class="position-absolute top-20 start-75 translate-middle p-1 bg-danger border border-light rounded-circle"
-                  >
-                    <span class="visually-hidden">New alerts</span>
-                  </span>
-                </i>
-              </a>
+                
             </li>
             <li class="col-auto">
               <div class="avatar avatar-xl position-relative">
@@ -190,12 +193,13 @@
 
       <div class="container">
         <div class="row">
+          <p class="col-8" id="server-msg"></p>
           <h3 class="col-12 mb-5">Add Product</h3>
 
           <div class="col-12 col-md-8">
             <p class="fs-5">Product Name</p>
             <div class="input-group input-group-outline mb-3 ">
-              <input type="text" class="form-control" name="product-name"  placeholder="Name"/>
+              <input type="text" class="form-control" id="product-name"  placeholder="Name"/>
             </div>
           </div>
 
@@ -204,14 +208,14 @@
             <p class="fs-5">Product Price</p>
             <div class="input-group input-group-outline mb-3 ">
               
-              <input type="Number" class="form-control" name="product-price" placeholder="Price"/>
+              <input type="Number" class="form-control" id="product-price" placeholder="Price"/>
             </div>
           </div>
           <div class="col-12 col-md-8 ">
             <p class="fs-5">Product Amount</p>
             <div class="input-group input-group-outline mb-3 ">
               
-              <input type="Number" class="form-control" name="product-amount" placeholder="Amount"/>
+              <input type="Number" class="form-control" id="product-amount" placeholder="Amount"/>
             </div>
           </div>
           <div class="col-12 col-md-8">
@@ -222,7 +226,7 @@
                   <select class="form-control fw-bolder text-warning " id="Category" style="border-radius: 0 !important" aria-placeholder="select-user">
                     <option value="" disabled="" selected="">Select Category</option>
     
-                    <option>user 1</option>
+                    <option value="1">user 1</option>
                     <option>user 2</option>
                     <option>user 3</option>
                     <option>user 4</option>
@@ -244,7 +248,7 @@
           <div class="col-12 col-md-8 ">
             <p class="fs-5">Product Image</p>
             <input type="file"
-                   id="avatar" name="avatar"
+                   id="product_image" name="avatar"
                    accept="image/png, image/jpeg" class="btn btn-link" >
                    
             
@@ -253,8 +257,8 @@
 
 
           <div class="col-12 mt-4 row  justify-content-start gap-lg-10">
-            <button class="btn btn-success col-lg-1">save</button>
-            <button class="btn btn-danger col-lg-1 ">reset</button>
+            <button class="btn btn-success col-lg-1" id="save">save</button>
+            <button class="btn btn-danger col-lg-1 " type="reset" id ="reset">reset</button>
 
           </div>
 
@@ -367,6 +371,7 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
+    <script src="../assets/js/logic/adminControl/addProduct.js"></script>
     <!--   Logic JS Files   -->
   </body>
 </html>
