@@ -5,13 +5,32 @@ let logout_Btn = document.getElementById("logoutBtn");
 //---- elemnts for admin data
 let adminName = document.getElementById("adminName");
 let adminImage = document.getElementById("adminImage");
+//---- elements to create pagination
+let navigationContainer = document.getElementById("navigation");
+let paginationStart = document.getElementById("paginationContainer");
 
 ///////////////////////////////////// >>> FILL ORDER FIELD <<< /////////////////////////////
-let product_loop_begin = 0; // index to start looping for product on
+let maxOrdersInPage = 2; // max number of orders in the page
 
-function fill_Orders(OrdersArray) {
+//------ get the beginning number of the products for each order
+function get_num(arrr, len) {
+  let the_num = 0;
+  for (let i = 0; i < len; i++) {
+    the_num += Number(arrr["orders"][i]["no_products"]);
+  }
+  return the_num;
+}
+
+function fill_Orders(OrdersArray, page) {
   //----- outer loop to creat orders , inner loop to get ordered products
-  for (let i = 0; i < OrdersArray["orders"].length; i++) {
+
+  let startFrom = page * maxOrdersInPage - maxOrdersInPage; //// start the loop based on the paggination number
+  let viewUntill = startFrom + maxOrdersInPage; //// the range of orders to loop on
+  let product_loop_begin = get_num(OrdersArray, startFrom); // index to start looping for product on
+
+  wholeOrderDiv.innerHTML = ""; // clearing page
+
+  for (let i = startFrom; i < viewUntill; i++) {
     let product_card_array = []; // insert products here
     product_card_array.length = 0;
     for (
@@ -174,22 +193,6 @@ function fill_Orders(OrdersArray) {
   }
 }
 
-//------ receving and sending function
-async function get_Orders() {
-  let response = await fetch("http://localhost/php-project/server/Orders.php", {
-    method: "GET",
-  });
-  let data = await response.json();
-  console.log(data);
-  if (data["notAuthorized"] == true) {
-    window.location = "http://localhost/php-project/admin/AdminSign-in.html";
-  } else {
-    fill_Orders(data);
-    admin_data(data);
-  }
-}
-get_Orders();
-
 //////////////////////////////// LOUGOUT FUNCTION ////////////////////////////////////
 logout_Btn.addEventListener("click", async function () {
   let formData = new FormData();
@@ -213,7 +216,6 @@ let currentState;
 function get_current_value(state) {
   currentState = state.value;
 }
-
 //------ changing the state
 function change_status(status) {
   //------- all values in order
@@ -259,3 +261,71 @@ function admin_data(array) {
   adminName.innerText = array["admin"]["admin_name"];
   adminImage.src = array["admin"]["admin_pic"];
 }
+
+/////////////////////// get pages count ////////////////////////////
+async function get_pages_number() {
+  let get_orders_number = await fetch(
+    "http://localhost/php-project/server/orders_pagination.php",
+    {
+      method: "get",
+    }
+  );
+  let orders_number = await get_orders_number.json();
+  pages_count = Math.ceil(orders_number / maxOrdersInPage);
+  // console.log("oder numbr" + " " + orders_number);
+  // console.log("pages num" + " " + pages_count);
+  createPagination(pages_count);
+  // setActivePage();
+}
+get_pages_number();
+
+////////////////////// creating paginationt navigation //////////////////////////////
+function createPagination(requiredPages) {
+  for (let i = 0; i < requiredPages; i++) {
+    let paginateContainer = document.createElement("li");
+    paginateContainer.classList.add("page-item");
+    let paginateLink = document.createElement("a");
+    paginateLink.classList.add("page-link");
+    paginateLink.setAttribute("href", "javascript:");
+    paginateLink.innerText = i + 1;
+    paginationStart.appendChild(paginateContainer);
+    paginateContainer.appendChild(paginateLink);
+  }
+}
+
+/////////////////////// get the active page ///////////////////////////////////////////
+function setActivePage(arr) {
+  let parentContainer = document.getElementById("paginationContainer");
+  let pages = parentContainer.getElementsByClassName("page-item");
+  let activepage = parentContainer.getElementsByClassName("active");
+
+  pages[0].classList.add("active");
+  for (let i = 0; i < pages.length; i++) {
+    pages[i].addEventListener("click", () => {
+      activepage[0].classList.remove("active");
+      pages[i].classList.add("active");
+      // console.log(pages[i].innerText);
+      fill_Orders(arr, Number(pages[i].innerText));
+    });
+  }
+  activepage = parentContainer.getElementsByClassName("active");
+  return activepage;
+}
+
+/////////////////////////////////// receving orders and admin data //////////////////////
+async function get_Orders() {
+  let response = await fetch("http://localhost/php-project/server/Orders.php", {
+    method: "GET",
+  });
+  let data = await response.json();
+  console.log(data);
+  if (data["notAuthorized"] == true) {
+    window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+  } else {
+    fill_Orders(data, 1);
+    admin_data(data);
+    setActivePage(data);
+  }
+}
+
+get_Orders();
