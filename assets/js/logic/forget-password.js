@@ -19,15 +19,7 @@ let requiredpassword = document.getElementById("requiredpassword");
 let roomrequired = document.getElementById("roomrequired");
 let roominvalid = document.getElementById("invalidroom");
 
-// console.log(warningMsg);
-// console.log(usernameRequired);
-// console.log(usernameInvalid);
-// console.log(emailRequired);
-// console.log(emailInvalid);
-// console.log(invalidpassword);
-// console.log(requiredpassword);
-// console.log(roomrequired);
-// console.log(roominvalid);
+
 
 ////////// NAME VALIDATION ////////////////////////////////
 
@@ -150,7 +142,7 @@ changePassword.addEventListener("click", (e) => {
     };
     let changedData = JSON.stringify(Data);
 
-    console.log(changedData);
+    // console.log(changedData);
 
     // SENDING DATA /////////////////////////////
     send_changes(changedData);
@@ -166,7 +158,7 @@ async function send_changes(formdata) {
     }
   );
   let data = await response.json();
-  console.log(data);
+  // console.log(data);
 
   if (data["status"] == true) {
     showToast(data);
