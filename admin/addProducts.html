@@ -144,7 +144,7 @@
             add Products
           </li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">Welcome AdminName</h6>
+          <h6 class="font-weight-bolder mb-0" id="admin_name">Welcome AdminName</h6>
         </nav>
         <div
           class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -171,7 +171,7 @@
             </li>
             <li class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img
+                <img id="admin_image"
                   src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
                   alt="profile_image"
                   class="w-100 border-radius-lg h-75 shadow-sm"
@@ -225,12 +225,6 @@
                 <div class="input-group input-group-outline    ">
                   <select class="form-control fw-bolder text-warning " id="Category" style="border-radius: 0 !important" aria-placeholder="select-user">
                     <option value="" disabled="" selected="">Select Category</option>
-    
-                    <option value="1">user 1</option>
-                    <option>user 2</option>
-                    <option>user 3</option>
-                    <option>user 4</option>
-                    <option>user 5</option>
                   </select>
                 </div>
               </div>
@@ -301,8 +295,8 @@
           </div>
           <div class="modal-body">
             <div class="input-group input-group-outline mb-3 ">
-              <label class="form-label">Category Name</label>
-              <input type="text" class="form-control" />
+              <label class="form-label" >Category Name</label>
+              <input type="text" class="form-control" id="category-name"/>
               
             </div>
           </div>
@@ -314,7 +308,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn bg-gradient-primary">
+            <button type="button" class="btn bg-gradient-primary" id="addCategory">
               OK
             </button>
           </div>
@@ -372,6 +366,7 @@
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
     <script src="../assets/js/logic/adminControl/addProduct.js"></script>
+    <script src="../assets/js/logic/adminControl/adminSession.js"></script>
     <!--   Logic JS Files   -->
   </body>
 </html>

@@ -127,7 +127,7 @@
             </li>
             
           </ol>
-          <h6 class="font-weight-bolder mb-0">Welcome AdminName</h6>
+          <h6 class="font-weight-bolder mb-0" id="admin_name">Welcome AdminName</h6>
         </nav>
         <div
           class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -153,7 +153,7 @@
             </li>
             <li class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img
+                <img id="admin_image"
                   src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
                   alt="profile_image"
                   class="w-100 border-radius-lg h-75 shadow-sm"
@@ -186,7 +186,7 @@
           </div>
           <div class="card-body px-0 pb-2">
             <div class="table-responsive p-0">
-              <table class="table align-items-center mb-0">
+              <table class="table align-items-center mb-0" id="products">
                 <thead>
                   <tr>
                     <th
@@ -233,7 +233,7 @@
                     <td class="align-middle text-center text-sm">
                         <div class="avatar avatar-xl position-relative">
                             <img 
-                              src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
+                              src="../server/products_images/1674053759.jpg"
                               alt="profile_image"
                               class="w-100 border-radius-lg h-75 shadow-sm"
                             />
@@ -459,7 +459,7 @@
             </button>
           </div>
           <div class="modal-body">
-            Are you sure you want to cancel your order?
+            Are you sure you want to delete this Product?
           </div>
           <div class="modal-footer">
             <button
@@ -469,7 +469,7 @@
             >
               Close
             </button>
-            <button type="button" class="btn bg-gradient-primary">
+            <button type="button" class="btn bg-gradient-primary" id="ok">
               OK
             </button>
           </div>
@@ -481,6 +481,9 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
+    <script src="../assets/js/logic/adminControl/functions.js"></script>
+    <script src="../assets/js/logic/adminControl/allProducts.js"></script>
+    <script src="../assets/js/logic/adminControl/adminSession.js"></script>
     <!--   Logic JS Files   -->
   </body>
 </html>

@@ -11,7 +11,7 @@ function createTableHead(rowContent){
     let tr= document.createElement("tr");
     for (const key in rowContent) {
         if (Object.hasOwnProperty.call(rowContent, key)) {
-            if(key =="user_id" || key == "order_id" || key == "product_id"){
+            if(key =="user_id" || key == "order_id" || key == "product_id" || key == "admin_id" || key == "category_id"){
                 continue;
             }
             else{
@@ -51,7 +51,7 @@ function createTableBodyRow(rowContent, btnEventRefrence, tableView, calledFunct
     for (const key in rowContent) {
         if (Object.hasOwnProperty.call(rowContent, key)) {
             let td = "";
-            if(key =="user_id" || key == "order_id" || key == "product_id"){
+            if(key =="user_id" || key == "order_id" || key == "product_id" || key == "admin_id" || key == "category_id"){
                 continue;
             }
             else if(key == firstKey){
@@ -79,6 +79,7 @@ function createButtonAndEvent(btnEventRefrence, tableView, calledFunction, userN
             tableView.style = "display: block !important";
 
             calledFunction(btnEventRefrence, tableView, userName);
+            console.log(btnEventRefrence);
             btn.innerHTML = '<i class="material-icons">remove</i>';
         }
         else if(btn.innerHTML == '<i class="material-icons">remove</i>'){
@@ -118,10 +119,10 @@ async function getAllOrders(tableId, ordersView) {
         selector.innerHTML += `<option value="${element['user_id']}">${element['user_name']}</option>`
     });
 }
-async function getOrdersOFuser(orderId,tableId, ordersView) {
+async function getOrdersOFuser(userId,tableId, ordersView) {
     let response = await fetch("http://localhost/php-project/server/adminPages/usersOrders.php", {
         method: "post",
-        body: JSON.stringify({"user_id" : orderId}),
+        body: JSON.stringify({"user_id" : userId}),
         headers:{
         "Content-Type": "application/json",
         }
@@ -164,7 +165,7 @@ async function getOrdersAtTime(dateFrom, dateTo, tableId, ordersView) {
         tableBody.append(row);
     });
 }
-async function getOrdersDetails(id, targetTable, userName) {
+async function getOrdersDetails(id, targetTable) {
     let response = await fetch("http://localhost/php-project/server/adminPages/userOrdersDetails.php", {
         method: "post",
         body: JSON.stringify({"user_id" : id}),
@@ -176,8 +177,6 @@ async function getOrdersDetails(id, targetTable, userName) {
     let data = await response.json();
     let table = targetTable.getElementsByTagName("table")[0];
     let tableView = document.getElementById("ordersProductsDetails");
-    let user = document.getElementById("userName");
-    user.innerHTML = userName + " orders";
     table.innerHTML="";
     let tableHead = createTableHead(data[0]);
     table.append(tableHead);
@@ -212,7 +211,7 @@ async function getOrdersProducts(id) {
 function createProductOrderCard(productName, categoryName, imgPath, amount, price){
 return `
     <div class="card-header p-0 mt-4 mx-3 orderCard" >
-                        <img src="${imgPath}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                        <img src="../server/products_images/${imgPath}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
                         <span class="position-absolute top-20 start-75 translate-middle badge rounded-pill bg-warning p-2">
                           x <span id="Itemscount">${amount}</span>
                         </span>
