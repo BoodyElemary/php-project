@@ -1,10 +1,36 @@
 <?php
 
+session_start();
 
 require("./env.php");
 
-if(isset($_FILES['image']))
+if (!array_key_exists("admin",$_SESSION))
 {
+    
+    $notAuthorized = [
+        "notAuthorized"=>true
+    ];
+    echo json_encode($notAuthorized);
+    
+    
+}
+else if ($_POST["getAdmin"])
+{
+    $admin_email = $_SESSION['admin'];
+    //------ getting admin info 
+    $admin_query = "SELECT admin_name , admin_pic FROM admins WHERE admin_email = '$admin_email' ";
+
+    $sql = $conn->prepare($admin_query);
+    $sql->execute();
+    $admin = $sql->fetch(PDO::FETCH_ASSOC);
+    echo json_encode([
+        "admin" => $admin
+    ]);
+
+}
+else if (isset($_FILES['image']))
+{
+
 
     /// RECIEVING DATA ////////////////////////////
     $username = $_POST["name"];
@@ -84,7 +110,10 @@ if(isset($_FILES['image']))
                 $query = "INSERT INTO users (user_name,user_email,user_password,user_pic,user_room) VALUES ('$username','$email','$password','$new_name','$roomNo') ";
                 $sql = $conn->prepare($query);
                 $sql->execute();
-                echo json_encode(["status" => true]);
+                echo json_encode([
+                    "status" => true,
+                    "admin" => $admin
+                ]);
             }
         }
 
@@ -92,5 +121,4 @@ if(isset($_FILES['image']))
     }
 
 }
-
 ?>

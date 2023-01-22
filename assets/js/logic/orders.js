@@ -259,7 +259,7 @@ function change_status(status) {
 //////////////////////// fill admin data ////////////////////////////
 function admin_data(array) {
   adminName.innerText = array["admin"]["admin_name"];
-  adminImage.src = array["admin"]["admin_pic"];
+  adminImage.src = "../server/users_images/" + array["admin"]["admin_pic"];
 }
 
 /////////////////////// get pages count ////////////////////////////
