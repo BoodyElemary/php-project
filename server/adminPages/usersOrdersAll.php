@@ -12,17 +12,13 @@ if (!array_key_exists("admin",$_SESSION))
 
     $request = json_decode(file_get_contents("php://input"), true);
     $ID = $request['user_id'];
-    $paginateNum = $request['paginateNum'];
-    $viewLength = 3;
-    $offset = $viewLength * ($paginateNum - 1);
     if ($ID == 0) {
         $query = "SELECT orders.user_id, users.user_name, sum(orders.total) as 'totalPrice' 
-        FROM orders , users WHERE orders.user_id = users.user_id  GROUP BY(orders.user_id)
-        LIMIT $viewLength OFFSET  $offset";
+        FROM orders , users WHERE orders.user_id = users.user_id  GROUP BY(orders.user_id)";
     } else {
         $query = "SELECT orders.user_id, users.user_name, sum(orders.total) as 'totalPrice' 
         FROM orders , users WHERE orders.user_id = users.user_id AND orders.user_id= $ID 
-        GROUP BY(orders.user_id)  LIMIT $viewLength OFFSET  $offset";
+        GROUP BY(orders.user_id)";
     }
     $sql = $conn->prepare($query);
     $result = $sql->execute();

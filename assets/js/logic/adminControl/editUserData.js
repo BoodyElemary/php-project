@@ -172,10 +172,14 @@ async function send_data(formdata) {
         }
     );
     let data = await response.json();
-
-    if (data["status"] == true) {
-        window.open("http://localhost/php-project/admin/Users.html", "_self");
-    } else if (data["error"] == true) {
-        showToast(data);
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+      else{
+        if (data["status"] == true) {
+            window.open("http://localhost/php-project/admin/Users.html", "_self");
+        } else if (data["error"] == true) {
+            showToast(data);
+        }
     }
 }

@@ -2,43 +2,44 @@
 
 
 require("../env.php");
+session_start();
+if (!array_key_exists("admin",$_SESSION))
+{  
+    $notAuthorized = [
+        "notAuthorized"=>true
+    ];
+    echo json_encode($notAuthorized);
 
-// if(isset($_FILES['productImage']))
+} else {
+    // if(isset($_FILES['productImage']))
 // {
 
     /// RECIEVING DATA ////////////////////////////
     $productId = $_POST["productId"];
     $productName = $_POST["productName"];
     $productPrice = $_POST["productPrice"];
-    $productStatus = $_POST["productStatus"];	
+    $productStatus = $_POST["productStatus"];
     $productCategory = $_POST["productCategory"];
     $productImage = $_POST["productImage"];
-    
+
     //// RENAMING IMAGES  //////////////////////
-	// $extension = pathinfo($_FILES['productImage']['name'], PATHINFO_EXTENSION);
-	// $new_name = time() . '.' . $extension;
+    // $extension = pathinfo($_FILES['productImage']['name'], PATHINFO_EXTENSION);
+    // $new_name = time() . '.' . $extension;
 
     //// VALIDATIONS ///////////////////////////////
     // $pictype = mime_content_type($_FILES['productImage']['tmp_name']);
-    if ($productName=="")
-    {
+    if ($productName == "") {
         $outMsg = "Product Name can't Be NULL";
-        echo json_encode(["error" => true, "msg" => "$outMsg"]);        
-    }
-    else if ($productPrice=="")
-    {
+        echo json_encode(["error" => true, "msg" => "$outMsg"]);
+    } else if ($productPrice == "") {
         $outMsg = "Product Price can't Be NULL";
-        echo json_encode(["error" => true, "msg" => "$outMsg"]);        
-    }
-    else if ($productStatus=="" || $productStatus<0)
-    {
+        echo json_encode(["error" => true, "msg" => "$outMsg"]);
+    } else if ($productStatus == "" || $productStatus < 0) {
         $outMsg = "Product Amount can't Be NULL or negative number";
-        echo json_encode(["error" => true, "msg" => "$outMsg"]);        
-    }
-    else if ($productCategory=="" || $productCategory<=0)
-    {
+        echo json_encode(["error" => true, "msg" => "$outMsg"]);
+    } else if ($productCategory == "" || $productCategory <= 0) {
         $outMsg = "Product Category can't Be NULL";
-        echo json_encode(["error" => true, "msg" => "$outMsg"]);        
+        echo json_encode(["error" => true, "msg" => "$outMsg"]);
     }
     // else if ($adminId=="" || $adminId<=0)
     // {
@@ -60,8 +61,7 @@ require("../env.php");
     //     $outMsg = "Please Enter a valid image type";
     //     echo json_encode(["error" => true, "msg" => "$outMsg"]);
     // }
-    else
-    {
+    else {
         //// MOVING IMAGES TO SERVER ////////////////////////
         // move_uploaded_file($_FILES['productImage']['tmp_name'], '../products_images/' . $new_name);
         // $data = array(
@@ -75,17 +75,14 @@ require("../env.php");
         $sql->execute();
         $result = $sql->execute();
         if ($result) {
-            
+
             $product = $sql->fetch();
 
-            if ($product)
-            {
+            if ($product) {
                 $outMsg = "The product already Exists";
                 echo json_encode(["error" => true, "msg" => "$outMsg"]);
-            }
-            else
-            {
-            
+            } else {
+
                 ///// INSERTING IN DATABASE ////////////////////////////
                 $query = "UPDATE products set 
                 product_name = '$productName', product_price = '$productPrice', 
@@ -93,13 +90,14 @@ require("../env.php");
                 product_availability = '$productStatus' where product_id = $productId";
                 $sql = $conn->prepare($query);
                 $sql->execute();
-                echo json_encode(["error" => false, "msg" =>"Product Successfully Updated"]);
+                echo json_encode(["error" => false, "msg" => "Product Successfully Updated"]);
             }
         }
 
 
     }
 
-// }
+    // }
+}
 
 ?>

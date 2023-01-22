@@ -9,13 +9,9 @@ if (!array_key_exists("admin",$_SESSION))
     echo json_encode($notAuthorized);
 
 } else {
-    $request = json_decode(file_get_contents("php://input"), true);
-    $paginateNum = $request['paginateNum'];
-    $viewLength = 3;
-    $offset = $viewLength * ($paginateNum - 1);
-    $query = "SELECT * from products limit $viewLength OFFSET  $offset";
+    $query = "SELECT * FROM products";
     $sql = $conn->prepare($query);
     $result = $sql->execute();
     $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($data);
+    echo json_encode(["count"=>count($data)]);
 }

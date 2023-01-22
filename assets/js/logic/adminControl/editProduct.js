@@ -1,15 +1,23 @@
+
 let productName = document.getElementById("product-name");
 let productPrice = document.getElementById("product-price");
 let productStatus = document.getElementById("product-status");
-let productCategory = document.getElementById("Category");
+let productCategories = document.getElementsByClassName("category-option");
 let productImage = document.getElementById("product_image");
 let submit = document.getElementById("save");
-
 let productId = localStorage.getItem("product_id");
 productName.value = localStorage.getItem("product_name");
 productPrice.value = localStorage.getItem("product_price");
 productStatus.value = localStorage.getItem("product_availability");
-productCategory.value = localStorage.getItem("category_id");
+let category =  localStorage.getItem("category_id");
+console.log(productCategories.length);
+for (let i = 0; i < productCategories.length; i++) {
+  console.log(category);
+  if(productCategories[i].value== category){
+    productCategories[i].setAttribute("selected");
+    
+  }
+};
 image = localStorage.getItem("product_picture");
 submit.onclick = function(){
     // if(productImage.value){
@@ -22,9 +30,7 @@ submit.onclick = function(){
     formData.append("productStatus", productStatus.value);
     formData.append("productCategory", productCategory.value);
     formData.append("productImage", image);
-  
     updateProduct(formData);
-    
 }
 
 async function updateProduct(formdata) {
@@ -33,16 +39,22 @@ async function updateProduct(formdata) {
       body: formdata,
     });
     let data = await response.json();
-    let msgContainer = document.getElementById("server-msg");
-    if(data['error']){
-      msgContainer.innerHTML = data['msg'];
-      msgContainer.style.display="block";
-      msgContainer.style.color = "red";
+    if(data['notAuthorized']){
+      window.location = "http://localhost/php-project/admin/AdminSign-in.html";
     }
     else{
-      msgContainer.innerHTML = data['msg'];
-      msgContainer.style.color = "#397e5e";
-      msgContainer.style.display="block";
+      let msgContainer = document.getElementById("server-msg");
+      if(data['error']){
+        msgContainer.innerHTML = data['msg'];
+        msgContainer.style.display="block";
+        msgContainer.style.color = "red";
+      }
+      else{
+        msgContainer.innerHTML = data['msg'];
+        msgContainer.style.color = "#397e5e";
+        msgContainer.style.display= "block";
+      }
     }
   }
+  
   

@@ -1,20 +1,29 @@
 
-async function getMyOrders(targetTable) {
+async function getMyOrders(targetTable, pNum) {
     let response = await fetch("http://localhost/php-project/server/myOrders.php", {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({"paginateNum": pNum}),
+        headers:{
+        "Content-Type": "application/json",
+        }
     });
     let data = await response.json();
-    let table = targetTable.getElementsByTagName("table")[0];
-    let tableView = document.getElementById("ordersProductsDetails");
-    table.innerHTML="";
-    let tableHead = createOrderHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
-    data.forEach(element => {
-        let row = createMyOrdersRow(element, element['order_id'], tableView, getOrdersProducts);
-        tableBody.append(row);
-    });
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/user_pages/sign-in.html";
+      }
+      else{
+        let table = targetTable.getElementsByTagName("table")[0];
+        let tableView = document.getElementById("ordersProductsDetails");
+        table.innerHTML="";
+        let tableHead = createOrderHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
+        data.forEach(element => {
+            let row = createMyOrdersRow(element, element['order_id'], tableView, getOrdersProducts);
+            tableBody.append(row);
+        });
+    }
    
 }
 
@@ -100,45 +109,165 @@ async function cancelOrder(id){
         }
         });
         let data = await response.json();
-        if(data['success']){
-            window.location.reload();
+        if(data['notAuthorized']){
+            window.location = "http://localhost/php-project/user_pages/sign-in.html";
         }
         else{
-            alert("error");
+            if(data['success']){
+                window.location.reload();
+            }
+            else{
+                alert("error");
+            }
         }
 }
 
+async function getMyOrdersCount() {
+    let data = await fetch(
+        "http://localhost/php-project/server/myOrdersPaginate.php"
+    );
+    let response = await data.json();
+    if(response['notAuthorized']){
+        window.location = "http://localhost/php-project/user_pages/sign-in.html";
+    }
+    else{
+      let dataLength = response['count'];
+      let viewLength = 3;
+      let paginateNum = Math.ceil(dataLength/viewLength);
+      createPagination(paginateNum);
+    }
+  }
+  
+  function createPagination(paginateNum){
+    let paginateContainer = document.getElementById("paginationContainer")
+    paginateContainer.innerHTML="";
+    for (let i = 1; i <= paginateNum; i++) {
+        let item = document.createElement("li");
+        item.classList.add(...["page-item", "paginate"]);
+        let link = document.createElement("a");
+        item.append(link);
+        link.classList.add(...["page-link", "text-bold"]);
+        link.innerHTML = i;
+        console.log(link);
+        paginateContainer.append(item);
+    }
+  
+    setActivePage();
+  
+  }
+  
+  function setActivePage() {
+    let parentContainer = document.getElementById("paginationContainer");
+    let pages = parentContainer.getElementsByClassName("paginate");
+    let activepage = parentContainer.getElementsByClassName("active");
+    pages[0].classList.add("active");
+    let table = document.getElementById("myOrders");
+    getMyOrders(table, 1);
+    for (let i = 0; i < pages.length; i++) {
+      pages[i].addEventListener("click", () => {
+        activepage[0].classList.remove("active");
+        pages[i].classList.add("active");
+        activepage = parentContainer.getElementsByClassName("active");
+        let activepageValue = parseInt(activepage[0].firstChild.innerText);
+        getMyOrders(table, activepageValue);
+      });
+    }
+  }
 
-async function getOrdersAtTime(dateFrom, dateTo, targetTable) {
+  getMyOrdersCount();
+  
+async function getMyOrdersTimeCount(dateFrom, dateTo, table) {
+    let data = await fetch(
+        "http://localhost/php-project/server/myOrdersWithTimePaginate.php",{
+        method: "post",
+        body: JSON.stringify({"dateFrom": dateFrom, "dateTo":dateTo }),
+        headers:{
+        "Content-Type": "application/json",
+        }
+    });
+    let response = await data.json();
+    if(response['notAuthorized']){
+        window.location = "http://localhost/php-project/user_pages/sign-in.html";
+    }
+    else{
+      let dataLength = response['count'];
+      let viewLength = 3;
+      let paginateNum = Math.ceil(dataLength/viewLength);
+      createPaginationTime(paginateNum, dateFrom, dateTo, table);
+    }
+  }
+  
+  function createPaginationTime(paginateNum, dateFrom, dateTo, table){
+    let paginateContainer = document.getElementById("paginationContainer")
+    paginateContainer.innerHTML="";
+    for (let i = 1; i <= paginateNum; i++) {
+        let item = document.createElement("li");
+        item.classList.add(...["page-item", "paginate"]);
+        let link = document.createElement("a");
+        item.append(link);
+        link.classList.add(...["page-link", "text-bold"]);
+        link.innerHTML = i;
+        console.log(link);
+        paginateContainer.append(item);
+    }
+  
+    setActivePageTime(dateFrom, dateTo, table);
+  
+  }
+  
+  function setActivePageTime(dateFrom, dateTo, table) {
+    let parentContainer = document.getElementById("paginationContainer");
+    let pages = parentContainer.getElementsByClassName("paginate");
+    let activepage = parentContainer.getElementsByClassName("active");
+    pages[0].classList.add("active");
+    // let table = document.getElementById("myOrders");
+    getOrdersAtTime(dateFrom, dateTo,table, 1);
+    for (let i = 0; i < pages.length; i++) {
+      pages[i].addEventListener("click", () => {
+        activepage[0].classList.remove("active");
+        pages[i].classList.add("active");
+        activepage = parentContainer.getElementsByClassName("active");
+        let activepageValue = parseInt(activepage[0].firstChild.innerText);
+        getOrdersAtTime(dateFrom, dateTo, table, activepageValue);
+      });
+    }
+  }
+async function getOrdersAtTime(dateFrom, dateTo, targetTable, pNum) {
     let response = await fetch("http://localhost/php-project/server/myOrdersWithTime.php", {
         method: "post",
-        body: JSON.stringify({"dateFrom" : dateFrom, "dateTo": dateTo}),
+        body: JSON.stringify({"dateFrom" : dateFrom, "dateTo": dateTo, "paginateNum": pNum}),
         headers:{
         "Content-Type": "application/json",
         }
 
     });
     let data = await response.json();
-    let table = targetTable.getElementsByTagName("table")[0];
-    let tableView = document.getElementById("ordersProductsDetails");
-    table.innerHTML="";
-    let tableHead = createOrderHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
-    data.forEach(element => {
-        let row = createMyOrdersRow(element, element['order_id'], tableView, getOrdersProducts);
-        tableBody.append(row);
-    });
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/user_pages/sign-in.html";
+      }
+      else{
+        let table = targetTable.getElementsByTagName("table")[0];
+        let tableView = document.getElementById("ordersProductsDetails");
+        table.innerHTML="";
+        let tableHead = createOrderHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
+        data.forEach(element => {
+            let row = createMyOrdersRow(element, element['order_id'], tableView, getOrdersProducts);
+            tableBody.append(row);
+        });
+    }
 }
 
 let table = document.getElementById("myOrders");
 let search = document.getElementById("search");
 search.onclick = function(){
+   let table = document.getElementById("myOrders");
    let dateFrom = document.getElementById("dateFrom").value;
    let dateTo = document.getElementById("dateTo").value;
-   getOrdersAtTime(dateFrom, dateTo, table);
+   getMyOrdersTimeCount(dateFrom, dateTo, table);
    
 }
-getMyOrders(table);
+
 

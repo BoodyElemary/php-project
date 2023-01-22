@@ -7,9 +7,73 @@ async function getAllUsers() {
         "http://localhost/php-project/server/adminPages/allUsers.php"
     );
     let response = await data.json();
-    // console.log(response);
-    displayUsersData(response);
+    if(response['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+    }
+    else{
+      let dataLength = response['count'];
+      let viewLength = 3;
+      let paginateNum = Math.ceil(dataLength/viewLength);
+      createPagination(paginateNum);
+        // displayUsersData(response);
+    }
 }
+
+function createPagination(paginateNum){
+    let paginateContainer = document.getElementById("paginationContainer")
+    paginateContainer.innerHTML="";
+    for (let i = 1; i <= paginateNum; i++) {
+        let item = document.createElement("li");
+        item.classList.add(...["page-item", "paginate"]);
+        let link = document.createElement("a");
+        item.append(link);
+        link.classList.add(...["page-link", "text-bold"]);
+        link.innerHTML = i;
+        console.log(link);
+        paginateContainer.append(item);
+    }
+
+    setActivePage();
+
+}
+
+function setActivePage() {
+    let parentContainer = document.getElementById("paginationContainer");
+    let pages = parentContainer.getElementsByClassName("paginate");
+    let activepage = parentContainer.getElementsByClassName("active");
+    pages[0].classList.add("active");
+    getUsersData(1);
+    for (let i = 0; i < pages.length; i++) {
+      pages[i].addEventListener("click", () => {
+        activepage[0].classList.remove("active");
+        pages[i].classList.add("active");
+        activepage = parentContainer.getElementsByClassName("active");
+        let activepageValue = parseInt(activepage[0].firstChild.innerText);
+        console.log(activepageValue);
+        getUsersData(activepageValue);
+      });
+    }
+  }
+async function getUsersData(paginateNum){
+    let data = await fetch(
+        "http://localhost/php-project/server/adminPages/usersData.php",{
+        method: "post",
+        body: JSON.stringify({"paginateNum" : paginateNum}),
+        headers:{
+        "Content-Type": "application/json",
+        }
+    });
+    let response = await data.json();
+    if(response['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+    }
+    else{
+        displayUsersData(response);
+    }
+
+}
+
+getUsersData(1);
 
 function displayUsersData(responseData) {
     let tableBody = document.getElementById("usersTable");
@@ -84,31 +148,7 @@ function displayUsersData(responseData) {
 
     });
 
-    //     async function editUser(editData) {
-    //         let response = await fetch(
-    //             "http://localhost:8080/php-project/server/getUserData.php", {
-    //                 method: "post",
-    //                 body: JSON.stringify({
-    //                     user_id: id,
-    //                 }),
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //             }
-    //         );
-    //         let res = await response.json();
-    //         console.log(res);
-
-    //         // let name = nameField.value;
-    //         // let email = emailField.value;
-    //         // let password = passwordField.value;
-    //         // let roomNo = roomNumberField.value;
-    //         // let profPic = imageField.value;
-    //     }
-
-    //     // let userName = document.createElement("td");
 }
-
 
 function confirmDelete(id){
     let model = document.getElementById("exampleModal");
@@ -148,3 +188,5 @@ async function deleteUser(id){
     
 }
 getAllUsers();
+
+

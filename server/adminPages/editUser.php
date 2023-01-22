@@ -2,8 +2,16 @@
 
 
 require("../env.php");
+session_start();
+if (!array_key_exists("admin",$_SESSION))
+{  
+    $notAuthorized = [
+        "notAuthorized"=>true
+    ];
+    echo json_encode($notAuthorized);
 
-// if (isset($_FILES['image'])) {
+} else {
+    // if (isset($_FILES['image'])) {
 
     /// RECIEVING DATA ////////////////////////////
     // $userId = $_POST['userId'];
@@ -62,4 +70,6 @@ require("../env.php");
             }
         }
     }
-// }
+    // }
+
+}

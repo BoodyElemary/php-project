@@ -10,14 +10,11 @@ if (!array_key_exists("id",$_SESSION))
 
 } else {
     $ID = $_SESSION['id'];
-    $request = json_decode(file_get_contents("php://input"), true);
-    $paginateNum = $request['paginateNum'];
-    $viewLength = 3;
-    $offset = $viewLength * ($paginateNum - 1);
+    // $ID = 4;
     $query = "SELECT orders.order_id, orders.order_date, orders.total,orders.order_status,
-     orders.notes from orders where user_id = 4 limit $viewLength OFFSET  $offset";
+     orders.notes from orders where user_id = $ID";
     $sql = $conn->prepare($query);
     $result = $sql->execute();
     $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($data);
+    echo json_encode(["count"=>count($data)]);
 }
