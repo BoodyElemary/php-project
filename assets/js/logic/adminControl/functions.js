@@ -11,7 +11,7 @@ function createTableHead(rowContent){
     let tr= document.createElement("tr");
     for (const key in rowContent) {
         if (Object.hasOwnProperty.call(rowContent, key)) {
-            if(key =="user_id" || key == "order_id" || key == "product_id"){
+            if(key =="user_id" || key == "order_id" || key == "product_id" || key == "admin_id" || key == "category_id"){
                 continue;
             }
             else{
@@ -51,7 +51,7 @@ function createTableBodyRow(rowContent, btnEventRefrence, tableView, calledFunct
     for (const key in rowContent) {
         if (Object.hasOwnProperty.call(rowContent, key)) {
             let td = "";
-            if(key =="user_id" || key == "order_id" || key == "product_id"){
+            if(key =="user_id" || key == "order_id" || key == "product_id" || key == "admin_id" || key == "category_id"){
                 continue;
             }
             else if(key == firstKey){
@@ -79,6 +79,7 @@ function createButtonAndEvent(btnEventRefrence, tableView, calledFunction, userN
             tableView.style = "display: block !important";
 
             calledFunction(btnEventRefrence, tableView, userName);
+            console.log(btnEventRefrence);
             btn.innerHTML = '<i class="material-icons">remove</i>';
         }
         else if(btn.innerHTML == '<i class="material-icons">remove</i>'){
@@ -91,8 +92,37 @@ function createButtonAndEvent(btnEventRefrence, tableView, calledFunction, userN
     return btn;
 }
 
-async function getAllOrders(tableId, ordersView) {
+async function getAllOrders(tableId, ordersView,pNum) {
     let response = await fetch("http://localhost/php-project/server/adminPages/usersOrders.php", {
+        method: "post",
+        body: JSON.stringify({"user_id" : 0, "paginateNum": pNum}),
+        headers:{
+        "Content-Type": "application/json",
+        }
+
+    });
+    let data = await response.json();
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+      else{
+        let table = document.getElementById(tableId);
+        let tableView = document.getElementById(ordersView);
+        table.innerHTML="";
+        let tableHead = createTableHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
+        getOrdersUsers();
+        data.forEach(element => {
+            let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
+            tableBody.append(row);
+            selector.innerHTML += `<option value="${element['user_id']}">${element['user_name']}</option>`
+        });
+    }
+}
+async function getOrdersUsers(){
+    let response = await fetch("http://localhost/php-project/server/adminPages/usersOrdersAll.php", {
         method: "post",
         body: JSON.stringify({"user_id" : 0}),
         headers:{
@@ -101,70 +131,74 @@ async function getAllOrders(tableId, ordersView) {
 
     });
     let data = await response.json();
-
-    let table = document.getElementById(tableId);
-    let tableView = document.getElementById(ordersView);
-    table.innerHTML="";
-    let tableHead = createTableHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
-
-    let selector = document.getElementById("users");
-    selector.innerHTML = "<option value='0' selected>Select a user</option>";
-    data.forEach(element => {
-        let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
-        tableBody.append(row);
-        selector.innerHTML += `<option value="${element['user_id']}">${element['user_name']}</option>`
-    });
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+      else{
+        let selector = document.getElementById("users");
+        selector.innerHTML = "<option value='0' selected>Select a user</option>";
+        data.forEach(element => {
+            selector.innerHTML += `<option value="${element['user_id']}">${element['user_name']}</option>`
+        });
+    }
 }
-async function getOrdersOFuser(orderId,tableId, ordersView) {
+async function getOrdersOFuser(tableId, ordersView, Pnum, userId) {
     let response = await fetch("http://localhost/php-project/server/adminPages/usersOrders.php", {
         method: "post",
-        body: JSON.stringify({"user_id" : orderId}),
+        body: JSON.stringify({"user_id" : userId, "paginateNum": Pnum}),
         headers:{
         "Content-Type": "application/json",
         }
 
     });
     let data = await response.json();
-    let table = document.getElementById(tableId);
-    let tableView = document.getElementById(ordersView);
-    table.innerHTML="";
-    let tableHead = createTableHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+      else{
+        let table = document.getElementById(tableId);
+        let tableView = document.getElementById(ordersView);
+        table.innerHTML="";
+        let tableHead = createTableHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
 
-    data.forEach(element => {
-        let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
-        tableBody.append(row);
-    });
+        data.forEach(element => {
+            let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
+            tableBody.append(row);
+        });
+    }
 }
-async function getOrdersAtTime(dateFrom, dateTo, tableId, ordersView) {
+async function getOrdersAtTime(dateFrom, dateTo, tableId, ordersView, pNum) {
     let response = await fetch("http://localhost/php-project/server/adminPages/usersOrdersWithTime.php", {
         method: "post",
-        body: JSON.stringify({"dateFrom" : dateFrom, "dateTo": dateTo}),
+        body: JSON.stringify({"dateFrom" : dateFrom, "dateTo": dateTo, "paginateNum": pNum}),
         headers:{
         "Content-Type": "application/json",
         }
 
     });
     let data = await response.json();
-    let table = document.getElementById(tableId);
-    let tableView = document.getElementById(ordersView);
-    table.innerHTML="";
-    let tableHead = createTableHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+      else{
+        let table = document.getElementById(tableId);
+        let tableView = document.getElementById(ordersView);
+        table.innerHTML="";
+        let tableHead = createTableHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
 
-    data.forEach(element => {
-        let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
-        tableBody.append(row);
-    });
+        data.forEach(element => {
+            let row = createTableBodyRow(element, element['user_id'], tableView, getOrdersDetails, element['user_name']);
+            tableBody.append(row);
+        });
+    }
 }
-async function getOrdersDetails(id, targetTable, userName) {
+async function getOrdersDetails(id, targetTable) {
     let response = await fetch("http://localhost/php-project/server/adminPages/userOrdersDetails.php", {
         method: "post",
         body: JSON.stringify({"user_id" : id}),
@@ -174,19 +208,22 @@ async function getOrdersDetails(id, targetTable, userName) {
     
     });
     let data = await response.json();
-    let table = targetTable.getElementsByTagName("table")[0];
-    let tableView = document.getElementById("ordersProductsDetails");
-    let user = document.getElementById("userName");
-    user.innerHTML = userName + " orders";
-    table.innerHTML="";
-    let tableHead = createTableHead(data[0]);
-    table.append(tableHead);
-    tableBody = document.createElement("tbody");
-    table.append(tableBody);
-    data.forEach(element => {
-        let row = createTableBodyRow(element, element['order_id'], tableView, getOrdersProducts);
-        tableBody.append(row);
-    });
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+    else{
+        let table = targetTable.getElementsByTagName("table")[0];
+        let tableView = document.getElementById("ordersProductsDetails");
+        table.innerHTML="";
+        let tableHead = createTableHead(data[0]);
+        table.append(tableHead);
+        tableBody = document.createElement("tbody");
+        table.append(tableBody);
+        data.forEach(element => {
+            let row = createTableBodyRow(element, element['order_id'], tableView, getOrdersProducts);
+            tableBody.append(row);
+        });
+    }
    
 }
 
@@ -201,18 +238,23 @@ async function getOrdersProducts(id) {
     
 });
     let data = await response.json();
-    let cardsContainer = document.getElementById("cards");
-    cardsContainer.innerHTML="";
-    data.forEach(element => {
-        let card = createProductOrderCard(element['product_name'], element['category_name'], element['product_picture'], element['quantity'], element["product_price"]);
-        cardsContainer.innerHTML +=card;
-    });
+    if(data['notAuthorized']){
+        window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+      }
+    else{
+        let cardsContainer = document.getElementById("cards");
+        cardsContainer.innerHTML="";
+        data.forEach(element => {
+            let card = createProductOrderCard(element['product_name'], element['category_name'], element['product_picture'], element['quantity'], element["product_price"]);
+            cardsContainer.innerHTML +=card;
+        });
+    }
 }
 
 function createProductOrderCard(productName, categoryName, imgPath, amount, price){
 return `
     <div class="card-header p-0 mt-4 mx-3 orderCard" >
-                        <img src="${imgPath}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                        <img src="../server/products_images/${imgPath}" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
                         <span class="position-absolute top-20 start-75 translate-middle badge rounded-pill bg-warning p-2">
                           x <span id="Itemscount">${amount}</span>
                         </span>

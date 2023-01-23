@@ -3,8 +3,15 @@ session_start();
 
 require("./env.php");
 
+// $_SESSION['admin'] = false;
 
 
+if(array_key_exists("logout",$_POST))
+{
+    session_destroy();
+    echo json_encode(["loggedout" => true]);
+}
+else{
 if(isset($_POST['email']))
 {
 
@@ -40,19 +47,21 @@ if(!preg_match($emailregx,$email))
             {
                 if ($admins["admin_password"] === $password)
                 {
-                    $_SESSION['email'] = $email;
+                    $_SESSION['admin'] = $email;
                     echo json_encode(
                         ["status"=>true]
                     );
                 }
                 else
                 {
+                    $_SESSION['admin'] = false;
                     $outMsg = "Invalid password";
                     echo json_encode(["error" => true, "msg" => "$outMsg"]);  
                 }
             } 
             else 
             {
+                $_SESSION['admin'] = false;
                 $outMsg = "Invalid E-mail";
                 echo json_encode(["error" => true, "msg" => "$outMsg"]);
             }
@@ -60,6 +69,10 @@ if(!preg_match($emailregx,$email))
         
     }
 }
-
-
+}
+// else
+// {
+// }
+// session_destroy();
+// print_r($_SESSION);
 ?>

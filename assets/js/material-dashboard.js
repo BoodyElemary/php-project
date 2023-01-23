@@ -289,13 +289,13 @@ function navbarBlurOnScroll(id) {
           }
         }, 10)
       );
-    } else {
-      content.addEventListener(
-        "ps-scroll-y",
-        debounce(function () {
-          transparentNavbar();
-        }, 10)
-      );
+    // } else {
+    //   content.addEventListener(
+    //     "ps-scroll-y",
+    //     debounce(function () {
+    //       transparentNavbar();
+    //     }, 10)
+    //   );
     }
   }
 

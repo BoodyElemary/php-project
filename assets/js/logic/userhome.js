@@ -1,12 +1,21 @@
+///////////////// >>defaults<< //////////////////
+
+let defaultPage = 1;
+
 /////////////////// >>> SHOWING USER INFO <<< ///////////////////////////
 //====== grabbing elenemts:
 let userName_field = document.getElementById("userName");
 let userImage_field = document.getElementById("userImage");
+let userNameFieldCart = document.getElementById("userField");
+let defaultRoom;
 
 //===== inserting user info :
 function fillUserInfo(userArr) {
   userName_field.innerText = userArr[0]["user_name"];
-  userImage_field.src = userArr[0]["user_pic"];
+  userImage_field.src = "../server/users_images/" + userArr[0]["user_pic"];
+  userNameFieldCart.innerText = userArr[0]["user_name"];
+
+  // console.log(defaultRoom);
 }
 
 ///////////////////////////////////// >>> FILL PRODUCT CARDS <<< /////////////////////////////
@@ -24,6 +33,7 @@ function fillProducts(productsArr) {
     let cardBodyContainer = document.createElement("div"); ////
     let divNameInfo = document.createElement("div"); ////
     let h5Name = document.createElement("h5"); ////
+    let hiddenId = document.createElement("span"); ////
     let divCatInfo = document.createElement("div"); ////
     let spanCat = document.createElement("span"); ////
     let spanPrice = document.createElement("span"); ////
@@ -34,7 +44,11 @@ function fillProducts(productsArr) {
     divContainer.classList.add("card", "card-blog", "card-plain");
     divHeader.classList.add("card-header", "p-0", "mt-n4", "mx-3");
     imglink.classList.add("d-block", "shadow-xl", "border-radius-xl");
-    img.setAttribute("src", `${productsArr[i]["product_picture"]}`);
+    hiddenId.classList.add("d-none", "pId");
+    img.setAttribute(
+      "src",
+      `../server/products_images/${productsArr[i]["product_picture"]}`
+    );
     img.classList.add("img-fluid", "shadow", "border-radius-xl");
     divCardBody.classList.add("card-body", "p-3");
     cardBodyContainer.classList.add(
@@ -42,7 +56,9 @@ function fillProducts(productsArr) {
       "align-items-center",
       "justify-content-between"
     );
+    h5Name.classList.add("product-name");
     h5Name.innerText = `${productsArr[i]["product_name"]}`;
+    hiddenId.innerText = `${[productsArr[i]["product_id"]]}`;
     divCatInfo.classList.add("tags", "mb-2");
     spanCat.classList.add("badge", "bg-gradient-info");
     spanCat.innerText = `${productsArr[i]["category_name"]}`;
@@ -76,12 +92,15 @@ function fillProducts(productsArr) {
     cardBodyContainer.appendChild(divNameInfo);
     cardBodyContainer.appendChild(spanPrice);
     divNameInfo.appendChild(h5Name);
+    divNameInfo.appendChild(hiddenId);
     divNameInfo.appendChild(divCatInfo);
     divCatInfo.appendChild(spanCat);
     addToCartContainer.appendChild(addToCartBtn);
     divParent.appendChild(divContainer);
     productsZone.appendChild(divParent);
   }
+  // calling add to cart  function
+
   addToCart();
 }
 
@@ -104,154 +123,44 @@ function showToast() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////// >>>> ADD TO CART <<<< ////////////
-
-// ======== ARRAYS:
-let addedProducts = [];
-let enterdCartItems = [];
-let arrayCheck = [];
-let avilablityCheck = false;
-// === for prices in cart :
-let pricesInCartArr = [];
-// ===============
-// console.log(pricesInCartArr);
+let orderdProductName;
+let orderdProductId;
 
 let addBtns = document.getElementsByClassName("addToCart");
+let productRow = document.getElementsByClassName("cartItem");
+
 function addToCart() {
   for (let i = 0; i < addBtns.length; i++) {
-    addBtns[i].addEventListener("click", (e) => {
-      let data = {};
-      let clicked = e.target;
-      let parent = clicked.parentElement.parentElement;
-      let orderdProductName = parent.firstChild.firstChild.firstChild.innerText;
-      let orderdProductPrice = parent.firstChild.lastChild.innerText;
-      data["orderdProductName"] = orderdProductName;
-      data["orderdProductPrice"] = Number(orderdProductPrice);
-      addedProducts.push(data);
-
-      // ======= for prices in cart ======
-
-      // ==================================
-
-      let addedItemToCart = addedProducts[addedProducts.length - 1];
-      // console.log(addedProducts);
-      if (addedProducts.length >= 1) {
-        for (let i = 0; i < addedProducts.length; i++) {
-          arrayCheck.push(addedProducts[i]);
-        }
-        arrayCheck.pop();
-        // console.log(arrayCheck);
-        for (let i = 0; i < arrayCheck.length; i++) {
-          if (
-            arrayCheck[i]["orderdProductName"] ===
-            addedItemToCart["orderdProductName"]
-          ) {
-            // console.log("exist");
-
-            avilablityCheck = true;
-
-            // console.log(targetedInput);
-          }
-          // if (arrayCheck.includes(addedItemToCart) === true) {
-
-          // }
-        }
-
-        if (avilablityCheck === true) {
-          let targetedInput = document.getElementById(
-            `${addedItemToCart["orderdProductName"]}`
-          );
-          let counterValue = parseInt(targetedInput.value);
-          counterValue = counterValue + 1;
-          // console.log(counterValue);
-          targetedInput.setAttribute("value", counterValue);
-        }
-
-        if (avilablityCheck === false) {
-          fillProductCart(addedItemToCart);
-          // console.log(addedItemToCart);
-          enterdCartItems.push(addedItemToCart);
-        }
-      } else if (addedProducts.length == 0) {
-        fillProductCart(addedItemToCart);
-        // console.log(addedItemToCart);
-        enterdCartItems.push(addedItemToCart);
-      }
-      // console.log(arrayCheck);
-      // console.log(enterdCartItems);
-      // console.log(addedItemToCart);
-      // console.log(arrayCheck.includes(addedItemToCart));
-      // console.log(addedProducts.pop().includes(addedItemToCart));
-      avilablityCheck = false;
-      // remove item from cart;
-
-      let removeFromCart = document.getElementsByClassName("removeFromCart");
-      for (let i = 0; i < removeFromCart.length; i++) {
-        removeFromCart[i].addEventListener("click", (e) => {
-          let clicked = e.target;
-          // console.log(clicked);
-          let container = clicked.parentElement.parentElement.parentElement;
-          let itemName = container.firstChild.firstChild.innerText;
-          // console.log(container);
-          // console.log(itemName);
-
-          let addedProductsLength = addedProducts.length;
-          // console.log(arrChecksLength);
-          while (addedProductsLength--) {
-            let index2 = arrayCheck
-              .map((object) => object.orderdProductName)
-              .indexOf(itemName);
-
-            // console.log(index);
-            if (index2 > -1) {
-              addedProducts.splice(index2, 1);
-            }
-          }
-
-          let arrChecksLength = arrayCheck.length;
-          // console.log(arrChecksLength);
-          while (arrChecksLength--) {
-            let index = arrayCheck
-              .map((object) => object.orderdProductName)
-              .indexOf(itemName);
-
-            // console.log(index);
-            if (index > -1) {
-              arrayCheck.splice(index, 1);
-            }
-          }
-          // console.log(arrChecksLength);
-          let index1 = enterdCartItems
-            .map((object) => object.orderdProductName)
-            .indexOf(itemName);
-
-          // console.log(index);
-          console.log(enterdCartItems);
-          if (index1 > -1) {
-            enterdCartItems.splice(index1, 1);
-          }
-          container.remove();
-          console.log(arrayCheck);
-
-          // avilablityCheck = false;
-        });
-      }
-      // changeTotal();
-    });
+    addBtns[i].addEventListener("click", addToCartClicked);
   }
+  // showing message of adding product to cart
+
   showToast();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////// >>>> get the cart Info <<<< ////////////
 
-//add items to cart <====================================
+function addToCartClicked(e) {
+  //
+  let clicked = e.target;
+  let parent = clicked.parentElement.parentElement;
+  orderdProductName = parent.firstChild.firstChild.firstChild.innerText;
+  orderdProductId = parent.firstChild.firstChild.children[1].innerText;
+  let orderdProductPrice = parent.firstChild.lastChild.innerText;
+  console.log(orderdProductId);
+  console.log(orderdProductPrice);
+  addItemToCart(orderdProductName, orderdProductPrice, orderdProductId);
+  updateCartPrice();
+}
 
-function fillProductCart(addedProducts) {
+function addItemToCart(productName, productPrice, orderdProductId) {
   let cartContainer = document.getElementById("cartParent");
 
   let cartContainer2 = document.createElement("div");
   let cartContainer3 = document.createElement("div"); ////
   let cartProductDiv = document.createElement("div"); ////
   let cartProductName = document.createElement("h6"); ////
+  let cartProductSpan = document.createElement("span"); ////
   let cartInputDiv = document.createElement("div"); ////
   let cartInput = document.createElement("input"); /////
   let cartPriceDiv = document.createElement("div"); ////
@@ -260,6 +169,22 @@ function fillProductCart(addedProducts) {
   let cartCancelDiv = document.createElement("div"); ////
   let cartCancelBtn = document.createElement("button"); ////
   let cartCancelIcon = document.createElement("i"); ////
+
+  //////////////// >>>> check avilablity in cart <<<< ////////////
+  let cartName = document.getElementsByClassName("productName");
+  let cartCount = document.getElementsByClassName("inputs");
+  for (let i = 0; i < cartName.length; i++) {
+    console.log(cartName);
+    console.log(orderdProductName);
+    if (cartName[i].innerText == orderdProductName) {
+      let cartCountVal = parseInt(cartCount[i].value);
+      cartCountVal[i] = parseInt(cartCount[i].value) + 1;
+      cartCount[i].setAttribute("value", cartCountVal + 1);
+      updateCartPrice();
+
+      return;
+    }
+  }
 
   cartContainer2.classList.add(
     "d-flex",
@@ -272,7 +197,8 @@ function fillProductCart(addedProducts) {
     "d-flex",
     "justify-content-center",
     "align-items-baseline",
-    "col-12"
+    "col-12",
+    "cartItem"
   );
   cartProductDiv.classList.add("col-5");
   cartInputDiv.classList.add("input-group", "input-group-outline", "mx-1");
@@ -287,7 +213,6 @@ function fillProductCart(addedProducts) {
   cartInput.setAttribute("onfocusout", "defocused(this)");
   cartInput.setAttribute("min", "1");
   cartInput.setAttribute("value", "1");
-  cartInput.setAttribute("id", `${addedProducts["orderdProductName"]}`);
   cartInput.style.width = "60px";
   cartPriceDiv.classList.add("col-3", "mx-2");
   cartCancelDiv.classList.add("col-1");
@@ -304,16 +229,20 @@ function fillProductCart(addedProducts) {
   );
   cartPrice.classList.add("cartPriceNumber");
 
+  cartProductName.classList.add("productName");
   cartCancelIcon.classList.add("material-icons");
+  cartProductSpan.classList.add("product-id", "d-none");
 
   cartPriceCurrency.innerText = "EPG ";
   cartCancelIcon.innerText = "clear";
-  cartProductName.innerText = `${addedProducts["orderdProductName"]}`;
-  cartPrice.innerText = `${addedProducts["orderdProductPrice"]}`;
+  cartProductName.innerText = `${productName}`;
+  cartProductSpan.innerText = `${orderdProductId}`;
+  cartPrice.innerText = `${productPrice}`;
   cartContainer.appendChild(cartContainer2);
   cartContainer2.appendChild(cartContainer3);
   cartContainer3.appendChild(cartProductDiv);
   cartProductDiv.appendChild(cartProductName);
+  cartProductDiv.appendChild(cartProductSpan);
   cartContainer3.appendChild(cartInputDiv);
   cartInputDiv.appendChild(cartInput);
   cartContainer3.appendChild(cartPriceDiv);
@@ -323,104 +252,291 @@ function fillProductCart(addedProducts) {
   cartCancelDiv.appendChild(cartCancelBtn);
   cartCancelBtn.appendChild(cartCancelIcon);
 
+  console.log(cartProductName.innerText);
+
+  let removeFromCartBtn = document.getElementsByClassName("removeFromCart");
+  let catInputs = document.getElementsByClassName("inputs");
+  for (let i = 0; i < removeFromCartBtn.length; i++) {
+    removeFromCartBtn[i].addEventListener("click", removeItem);
+    catInputs[i].addEventListener("change", changeQuantity);
+    console.log(removeFromCartBtn[i]);
+  }
+  updateCartPrice();
 }
+
+let removeBtn = document.getElementsByClassName("removeFromCart");
+for (let i = 0; i < removeBtn.length; i++) {
+  button = removeBtn[i];
+  button.addEventListener("click", removeItem);
+}
+function removeItem(e) {
+  btnClicked = e.target;
+  btnClicked.parentElement.parentElement.parentElement.remove();
+  updateCartPrice();
+}
+let quantityInput = document.getElementsByClassName("inputs");
+
+for (let i = 0; i < quantityInput; i++) {
+  input = quantityInput[i];
+  input.addEventListener("change", changeQuantity);
+}
+
+function changeQuantity(e) {
+  let input = e.target;
+  // console.log("first");
+  if (isNaN(input.value) || input.value <= 0) {
+    input.value = 1;
+  }
+  updateCartPrice();
+}
+
+// let productRow = document.getElementsByClassName("cartItem");
+function updateCartPrice() {
+  let total = 0;
+  // let Tcount = 0;
+  for (let i = 0; i < productRow.length; i++) {
+    console.log(productRow[i]);
+    // cartRow = productRow[i];
+    let priceElement = document.getElementsByClassName("cartPriceNumber")[i];
+    let quantityElement = document.getElementsByClassName("inputs")[i];
+    console.log(priceElement);
+    console.log(quantityElement);
+    let price = parseFloat(priceElement.innerText);
+    let quantity = quantityElement.value;
+    total = total + price * quantity;
+  }
+  document.getElementById("totalPay").innerText = total;
+
+  // document.getElementsByClassName("inputs")[0].textContent = i /= 2;
+}
+
+//show rooms
+
+let roomsInput = document.getElementById("userRoom");
+console.log(roomsInput);
+
+function fillRoomsInput(userArray) {
+  roomsInput.innerText = "";
+  let defaultOption = document.createElement("option");
+  defaultOption.setAttribute("selected", "selected");
+  defaultOption.setAttribute("disabled", "disabled");
+  defaultOption.setAttribute("hidden", "hidden");
+  defaultOption.innerText = "choose a room";
+  roomsInput.appendChild(defaultOption);
+  for (let i = 0; i < userArray.length; i++) {
+    let selectOption = document.createElement("option");
+    defaultRoom = userArray[i]["user_room"];
+    selectOption.innerText = defaultRoom;
+    roomsInput.appendChild(selectOption);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//add items to cart <====================================
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// addToCart();
-// viewProduct();
-
 ///////////////// fetch func. ////////////////////////////////
-async function get_products() {
+let userId;
+async function get_products(currentPage) {
+  let bodyFormat = { pageCount: currentPage };
   let response = await fetch("http://localhost/php-project/server/Home.php", {
-    method: "GET",
-    // body: product,
-    // headers:
+    method: "POST",
+    body: JSON.stringify(bodyFormat),
   });
   let data = await response.json();
-  console.log(data);
-  fillProducts(data["products"]);
-  fillUserInfo(data["user"]);
-  // let x = 5;
-  // if (x == 5) {
-  //   // window.location = "http://localhost/php-project/user_pages/sign-in.html";
-  //   console.log("should be redirected");
-  // }
+  if (data["error"]) {
+    window.location = "http://localhost/php-project/user_pages/sign-in.html";
+  } else {
+    console.log(data);
+    fillProducts(data["products"]);
+    fillUserInfo(data["user"]);
+    fillRoomsInput(data["allRooms"]);
+    userId = data["user"][0]["user_id"];
+  }
 }
-get_products();
 
-function changeTotal() {
-  let prices = document.getElementsByClassName("cartPriceNumber");
-  let totalPay = document.getElementById("totalPay").innerText;
-  let Total = Number(totalPay);
-  let itemsCount = document.getElementsByClassName("inputs");
-  for (let i = 0; i < prices.length; i++) {
-    let itemCart = prices[i].parentElement.parentElement.parentElement;
-    // console.log(itemsCount[i].value);
-    // Total = Total + parseInt(prices[prices.length - 1].innerText);
-    // console.log(Total);
+let navigationContainer = document.getElementById("navigation");
+console.log(navigationContainer);
 
-    let beforeInputStep = Number(itemsCount[i].value);
-    itemsCount[i].addEventListener("change", () => {
-      // console.log(beforeInputStep);
-      let itemNo = Number(itemsCount[i].value);
-      let price = Number(prices[i].innerText);
-      let itemsInCart_Data = {};
+function createPagination(requiredPages) {
+  let paginationStart = document.getElementById("paginationContainer");
+  paginationStart.innerText = "";
+  for (let i = 0; i < requiredPages; i++) {
+    let paginateContainer = document.createElement("li");
+    paginateContainer.classList.add("page-item");
+    let paginateLink = document.createElement("a");
+    paginateLink.classList.add("page-link");
+    paginateLink.setAttribute("href", "javascript:");
+    paginateLink.innerText = i + 1;
+    paginationStart.appendChild(paginateContainer);
+    paginateContainer.appendChild(paginateLink);
+  }
+}
 
-      itemsInCart_Data["name"] = itemCart.firstChild.firstChild.innerText;
+async function getPageCount() {
+  let response = await fetch(
+    "http://localhost/php-project/server/paginationHome.php",
+    {
+      method: "GET",
+    }
+  );
+  let data = await response.json();
+  console.log(data);
+  if (data["error"]) {
+    window.location = "http://localhost/php-project/user_pages/sign-in.html";
+  } else {
+    createPagination(data);
+    setActivePage();
+  }
 
-      // console.log(itemNo);
-      // console.log(price);
-      // console.log(Total);
-      if (beforeInputStep < itemNo) {
-        Total = 0;
-        Total += itemNo * price;
-        itemsInCart_Data["price"] = Total;
-      } else if (beforeInputStep > itemNo) {
-        Total = 0;
-        Total += itemNo * price;
-        itemsInCart_Data["price"] = Total;
-      }
+  // get_products(currentPage);
+}
 
-      if (pricesInCartArr.length === 0) {
-        pricesInCartArr.push(itemsInCart_Data);
-      } else {
-        for (let i = 0; i < pricesInCartArr.length; i++) {
-          if (
-            pricesInCartArr[i]["name"] ==
-            itemCart.firstChild.firstChild.innerText
-          ) {
-            console.log("first");
-            pricesInCartArr[i]["price"] = Total;
-          } else {
-            console.log("second");
-            pricesInCartArr.push(itemsInCart_Data);
-          }
-        }
-      }
-
-      console.log(pricesInCartArr);
-      totalPay = document.getElementById("totalPay");
-      totalPay.innerText = Total;
-      beforeInputStep = Number(itemsCount[i].value);
+function setActivePage() {
+  let parentContainer = document.getElementById("paginationContainer");
+  let pages = parentContainer.getElementsByClassName("page-item");
+  let activepage = parentContainer.getElementsByClassName("active");
+  pages[0].classList.add("active");
+  get_products(1);
+  for (let i = 0; i < pages.length; i++) {
+    pages[i].addEventListener("click", () => {
+      activepage[0].classList.remove("active");
+      pages[i].classList.add("active");
+      activepage = parentContainer.getElementsByClassName("active");
+      let activepageValue = parseInt(activepage[0].firstChild.innerText);
+      console.log(activepageValue);
+      productsZone.innerHTML = "";
+      get_products(activepageValue);
     });
   }
-  // console.log(prices);
 }
-changeTotal();
 
-function initiatOrder() {
-  let confimBtn = document.getElementById("confirmBtn");
-  let itemsCount = document.getElementsByClassName("inputs");
-  confimBtn.addEventListener("click", () => {
-    console.log("first");
-    console.log(enterdCartItems);
-    for (let i = 0; i < itemsCount.length; i++) {
-      // console.log(itemsCount[i].value);
-      enterdCartItems[i].productsCount = parseInt(itemsCount[i].value);
+getPageCount();
+
+async function getSearchProducts(searchdata) {
+  let bodyFormat = { searchdata: searchdata };
+  let response = await fetch(
+    "http://localhost/php-project/server/home-Search.php",
+    {
+      method: "POST",
+      body: JSON.stringify(bodyFormat),
     }
-    console.log(enterdCartItems);
+  );
+  let data = await response.json();
+  console.log(data["searchedPrdoucts"]);
+  productsZone.innerHTML = "";
+  let paginationContainer = document.getElementById("");
+  console.log(paginationContainer);
+  fillProducts(data["searchedPrdoucts"]);
+}
+
+function productSearch() {
+  let searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("keyup", () => {
+    let searchData = searchInput.value;
+    if (!searchData) {
+      getPageCount();
+    } else {
+      getSearchProducts(searchData);
+    }
   });
 }
 
-initiatOrder();
+productSearch();
+
+function initiateOrder() {
+  let confirmBtn = document.getElementById("confirmBtn");
+  let orderDetails = {};
+  confirmBtn.addEventListener("click", () => {
+    let cartItems = document.getElementsByClassName("cartItem");
+    let noteValue = document.getElementById("userNote").value;
+    let roomNumber = document.getElementById("userRoom").value;
+    let productid = document.getElementsByClassName("product-id");
+    let inputsCount = document.getElementsByClassName("inputs");
+    let cartContainer = document.getElementById("cartParent");
+    let total = document.getElementById("totalPay");
+    console.log(productid);
+    if (cartContainer.children.length == 0) {
+      alert("cannot make your order");
+    } else if (roomNumber == "choose a room") {
+      alert("please select a room");
+    } else {
+      orderDetails.user_id = userId;
+      orderDetails.note = noteValue;
+      orderDetails.room_no = parseInt(roomNumber);
+      let products = {};
+      let product_id = {};
+      for (let i = 0; i < cartItems.length; i++) {
+        let itemId = parseInt(productid[i].innerText);
+        console.log(itemId);
+
+        products[`p${i + 1}`] = {};
+        products[`p${i + 1}`]["product_id"] = itemId;
+        products[`p${i + 1}`]["quantity"] = parseInt(inputsCount[i].value);
+        console.log(products[`p${i + 1}`]);
+        orderDetails["products"] = products;
+      }
+
+      sendOrderData(orderDetails);
+      cartContainer.innerText = "";
+      userNote.value = "";
+
+      total.innerText = 0;
+    }
+  });
+}
+
+initiateOrder();
+
+// '{"user_id": 2,
+//             "note": "welcome",
+//             "room_no": 214,
+//             "products":{
+//                 "p1":{
+//                     "product_id": 1,
+//                     "quantity": 3
+//                 },
+//                 "p2":{
+//                     "product_id": 2,
+//                     "quantity": 2
+//                 }
+//             }
+
+//             }'
+
+// alert("hi");
+
+async function sendOrderData(orderDetails) {
+  let response = await fetch(
+    "http://localhost/php-project/server/initiateOrderUser.php",
+    {
+      method: "POST",
+      body: JSON.stringify(orderDetails),
+    }
+  );
+  let data = await response.json();
+  console.log(data);
+}
+
+// alert("");
+
+//---- grabbing elements for functions
+let logout_Btn = document.getElementById("logoutBtn");
+//////////////////////////////// LOUGOUT FUNCTION ////////////////////////////////////
+logout_Btn.addEventListener("click", async function () {
+  let formData = new FormData();
+  formData.append("logout", true);
+  let logoutSent = await fetch(
+    "http://localhost/php-project/server/Admin_Sign_In.php",
+    {
+      method: "post",
+      body: formData,
+    }
+  );
+  let logoutResponse = await logoutSent.json();
+  if (logoutResponse["loggedout"] == true) {
+    window.location = "http://localhost/php-project/user_pages/sign-in.html";
+  }
+});
