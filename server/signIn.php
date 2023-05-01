@@ -27,7 +27,7 @@ if(!preg_match($emailregx,$email))
     else
     {
         ///// RETRIEVING FROM DATABASE ////////////////////////////
-        $query = "SELECT user_password FROM users WHERE user_email = '$email'; ";
+        $query = "SELECT user_password , user_id FROM users WHERE user_email = '$email'; ";
         $sql = $conn->prepare($query);
         $sql->execute();
         $result = $sql->execute();
@@ -41,6 +41,7 @@ if(!preg_match($emailregx,$email))
                 if ($users["user_password"] === $password)
                 {
                     $_SESSION['email'] = $email;
+                    $_SESSION['id'] = $users['user_id'];
                     echo json_encode(
                         ["status"=>true]
                     );
@@ -60,6 +61,4 @@ if(!preg_match($emailregx,$email))
         
     }
 }
-
-
 ?>

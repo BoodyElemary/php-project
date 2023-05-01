@@ -99,8 +99,8 @@
             </li>
           </ul>
           <ul class="navbar-nav d-lg-block d-none">
-            <li class="nav-item" id="logoutBtn">
-              <a class="btn btn-sm mb-0 me-1 bg-gradient-danger">Log Out</a>
+            <li class="nav-item">
+              <a class="btn btn-sm mb-0 me-1 bg-gradient-danger" id="logoutBtn">Log Out</a>
             </li>
           </ul>
         </div>
@@ -132,7 +132,10 @@
             add User
           </li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="admin_name">Welcome AdminName</h6>
+          <h6 class="font-weight-bolder mb-0">Welcome<span
+            id="adminName"
+            style="color: rgb(255, 77, 0); font-size: 20px"
+          ></span></h6>
         </nav>
         <div
           class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -154,14 +157,15 @@
               />
             </li>
             <li class="nav-item px-3 d-flex align-items-center">
-              
+
             </li>
             <li class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img id="admin_image"
-                  src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
+                <img
+                  src=""
                   alt="profile_image"
                   class="w-100 border-radius-lg h-75 shadow-sm"
+                  id="adminImage"
                 />
               </div>
             </li>
@@ -489,7 +493,5 @@
     <script src="../assets/js/material-dashboard.js"></script>
     <!--   Logic JS Files   -->
     <script src="../assets/js/logic/Admin_Add_User.js"></script>
-    <script src="../assets/js/logic/adminControl/adminSession.js"></script>
-    <script src="../assets/js/logic/adminControl/adminLogOut.js"></script>
   </body>
 </html>

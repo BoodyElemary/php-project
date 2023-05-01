@@ -10,7 +10,7 @@ let navigationContainer = document.getElementById("navigation");
 let paginationStart = document.getElementById("paginationContainer");
 
 ///////////////////////////////////// >>> FILL ORDER FIELD <<< /////////////////////////////
-let maxOrdersInPage = 2; // max number of orders in the page
+let maxOrdersInPage = 4; // max number of orders in the page
 
 //------ get the beginning number of the products for each order
 function get_num(arrr, len) {
@@ -39,26 +39,27 @@ function fill_Orders(OrdersArray, page) {
       j++
     ) {
       product_card_array.push(`
-        <div class="card-body px-0 pb-2 d-flex">
-        <div class="row">
-        <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
-        <div class="card card-blog card-plain w-md-75">
-        <div class="card-header p-0 mt-n4 mx-3" onclick=alerrt()>
-        <a class="d-block shadow-xl border-radius-xl">
-        <img
-        src="${OrdersArray["products"][j]["product_picture"]}"
-        alt="img-blur-shadow"
-        class="img-fluid shadow border-radius-xl position-relative"
-        />
+      <div class="col">
+        <div class="card-body px-0 pb-2">
+          <div class="row">
+           <div class="col-xl-3 col-md-6 mb-xl-0 mb-4 mt-4">
+             <div class="card card-blog card-plain">
+               <div class="card-header p-0 mt-n4 row">
+                 <a class="d-block shadow-xl border-radius-xl col px-0">
+                    <img
+                    src="../server/products_images/${OrdersArray["products"][j]["product_picture"]}"
+                    alt="img-blur-shadow"
+                    class="img-fluid shadow border-radius-xl position-relative"
+                    />
                         <span
                         class="position-absolute top-20 start-75 translate-middle badge rounded-pill bg-warning p-2"
                         >
                         x <span id="Itemscount">${OrdersArray["products"][j]["quantity"]}</span>
                         <span class="visually-hidden">unread messages</span>
                         </span>
-                        </a>
-                        </div>
-                        <div class="card-body p-3">
+                  </a>
+                </div>
+              <div class="card-body p-3">
                         <div
                         class="d-flex align-items-center justify-content-between"
                         >
@@ -77,6 +78,7 @@ function fill_Orders(OrdersArray, page) {
                         </div>
                         <!-- here we can add products -->
                         </div>
+                        </div>
                         </div>`);
     }
     product_loop_begin =
@@ -86,7 +88,7 @@ function fill_Orders(OrdersArray, page) {
     let selected1 = "";
     let selected2 = "";
     let selected3 = "";
-    if (OrdersArray["orders"][i]["order_status"] == "progress") {
+    if (OrdersArray["orders"][i]["order_status"] == "processing") {
       selected1 = "selected";
     } else if (OrdersArray["orders"][i]["order_status"] == "out for delivery") {
       selected2 = "selected";
@@ -103,7 +105,7 @@ function fill_Orders(OrdersArray, page) {
       class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"
           >
           <div
-              class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+              class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3"
             >
               <h6 class="text-white text-capitalize ps-3">
               ${OrdersArray["orders"][i]["user_name"]} Orders
@@ -174,7 +176,7 @@ function fill_Orders(OrdersArray, page) {
                           onchange=change_status(this)
                           onclick=get_current_value(this)
                         >
-                          <option class = "opt" value="progress" ${selected1}>progress</option>
+                          <option class = "opt" value="processing" ${selected1}>processing</option>
                           <option class = "opt" value="out for delivery" ${selected2}>out for delivery</option>
                           <option class = "opt" value="delivered" ${selected3}>delivered</option>
                         </select>
@@ -186,7 +188,11 @@ function fill_Orders(OrdersArray, page) {
             </div>
           </div>
         </div>
+        <div class="container">
+        <div class="row">
         ${product_card_array}
+        </div>
+        </div>
       </div>
     </div>
   </div>`;
@@ -259,7 +265,7 @@ function change_status(status) {
 //////////////////////// fill admin data ////////////////////////////
 function admin_data(array) {
   adminName.innerText = array["admin"]["admin_name"];
-  adminImage.src = array["admin"]["admin_pic"];
+  adminImage.src = "../server/admin_images/" + array["admin"]["admin_pic"];
 }
 
 /////////////////////// get pages count ////////////////////////////

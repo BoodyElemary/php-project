@@ -1,14 +1,7 @@
 <?php 
 require_once ('../env.php');
 session_start();
-if (!array_key_exists("admin",$_SESSION))
-{  
-    $notAuthorized = [
-        "notAuthorized"=>true
-    ];
-    echo json_encode($notAuthorized);
 
-} else {
     $ID = json_decode(file_get_contents("php://input"), true)['order_id'];
 
     $query = "SELECT orderedproducts.order_id, orderedproducts.product_id, orderedproducts.quantity,
@@ -22,4 +15,3 @@ if (!array_key_exists("admin",$_SESSION))
     $result = $sql->execute();
     $data = $sql->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($data);
-}

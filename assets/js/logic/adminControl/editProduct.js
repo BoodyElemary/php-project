@@ -2,7 +2,7 @@
 let productName = document.getElementById("product-name");
 let productPrice = document.getElementById("product-price");
 let productStatus = document.getElementById("product-status");
-let productCategories = document.getElementsByClassName("category-option");
+let productCategory = document.getElementById("Category");
 let productImage = document.getElementById("product_image");
 let submit = document.getElementById("save");
 let productId = localStorage.getItem("product_id");
@@ -10,14 +10,11 @@ productName.value = localStorage.getItem("product_name");
 productPrice.value = localStorage.getItem("product_price");
 productStatus.value = localStorage.getItem("product_availability");
 let category =  localStorage.getItem("category_id");
-console.log(productCategories.length);
-for (let i = 0; i < productCategories.length; i++) {
-  console.log(category);
-  if(productCategories[i].value== category){
-    productCategories[i].setAttribute("selected");
-    
-  }
-};
+
+  productCategory.value  == category;
+  let c= productCategory.getElementsByTagName("option");
+  console.log(c.length);
+
 image = localStorage.getItem("product_picture");
 submit.onclick = function(){
     // if(productImage.value){

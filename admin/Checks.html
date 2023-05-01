@@ -34,25 +34,25 @@
     />
 
     <style>
-      #orders, #ordersProductsDetails{
-          display: none !important;
+      #orders,
+      #ordersProductsDetails {
+        display: none !important;
+      }
+      .orderCard {
+        width: 240px;
+      }
+      @media (min-width: 1000px) {
+        .date {
+          width: 40%;
         }
-        .orderCard{
-          width: 240px;
+        #search {
+          height: 50px;
+          margin-top: 30px;
         }
-        @media(min-width:1000px){
-          .date{
-            width: 40%;
-          }
-          #search{
-            height: 50px;
-            margin-top: 30px;
-          }
-        }
+      }
     </style>
-
   </head>
- 
+
   <body class="g-sidenav-show bg-gray-200">
     <!-- Navbar -->
     <nav
@@ -146,7 +146,9 @@
               Checks
             </li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="admin_name">Welcome AdminName</h6>
+          <h6 class="font-weight-bolder mb-0" id="admin_name">
+            Welcome AdminName
+          </h6>
         </nav>
         <div
           class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -167,12 +169,11 @@
                 onclick="darkMode(this)"
               />
             </li>
-            <li class="nav-item px-3 d-flex align-items-center">
-
-            </li>
+            <li class="nav-item px-3 d-flex align-items-center"></li>
             <li class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img id="admin_image"
+                <img
+                  id="admin_image"
                   src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
                   alt="profile_image"
                   class="w-100 border-radius-lg h-75 shadow-sm"
@@ -185,131 +186,127 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-        <div class="container d-lg-flex gap-lg-6">
-          <div class="input-group input-group-static my-3 date">
-            <label>Date From</label>
-            <input type="date" class="form-control" id="dateFrom" />
-          </div>
-          <div class="input-group input-group-static my-3 date">
-            <label>Date To</label>
-            <input type="date" class="form-control" id="dateTo"/>
-          </div>
-
-          <button class="btn btn-primary" id="search">Search</button>
+      <div class="container d-lg-flex gap-lg-6">
+        <div class="input-group input-group-static my-3 date">
+          <label>Date From</label>
+          <input type="date" class="form-control" id="dateFrom" />
         </div>
-        <div class="container">
-            <div class="row col-12 col-lg-6">
-    
-                <div class="input-group input-group-outline mb-5 ">
-                  <select
-                    class="form-control fw-bolder text-warning"
-                    id="users"
-                    style="border-radius: 0 !important"
-                    aria-placeholder="select-user"
-                  >
-                    <option value="0" selected>All Users</option>
-                  </select>
-                </div>
-            </div>
+        <div class="input-group input-group-static my-3 date">
+          <label>Date To</label>
+          <input type="date" class="form-control" id="dateTo" />
         </div>
 
-          <div class="row">
-          <div class="col-12">
-            <div class="card my-4">
+        <button class="btn btn-info" id="search">Search</button>
+      </div>
+      <div class="container">
+        <div class="row col-12 col-lg-6">
+          <div class="input-group input-group-outline mb-5">
+            <select
+              class="form-control fw-bolder text-warning"
+              id="users"
+              style="border-radius: 0 !important"
+              aria-placeholder="select-user"
+            >
+              <option value="0" selected>All Users</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div
-                class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"
+                class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3"
               >
-                <div
-                  class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
-                >
-                  <h6 class="text-white text-capitalize ps-3">
-                    Users Orders Table
-                  </h6>
-                </div>
-              </div>
-              <div class="card-body px-0 pb-2">
-                <div class="table-responsive p-0">
-                  <table class="table align-items-center mb-0" id="usersTable">
-                    <!-- ///////// -->
-                  </table>
-                </div>
+                <h6 class="text-white text-capitalize ps-3">
+                  Users Orders Table
+                </h6>
               </div>
             </div>
-            <div class="card my-6" id="orders">
-                <div
-                  class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"
-                >
-                  <div
-                    class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
-                  >
-                    <h6 class="text-white text-capitalize ps-3" id="userName">
-                     Abdelrahman Orders
-                    </h6>
-                  </div>
-                </div>
-                <div class="card-body px-0 pb-2">
-                  <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0" id="userOrders">
-                        <!--  -->
-                    </table>
-                  </div>
-                </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0" id="usersTable">
+                  <!-- ///////// -->
+                </table>
               </div>
-              <div class="card my-4" id="ordersProductsDetails">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                    <h6 class="text-white text-capitalize ps-3">Order details</h6>
-                  </div>
-                </div>
-                <div class="card-body px-0 pb-2" >
-                  <div class="container">
-                    <div class="row justify-content-center" id="cards">
-                    </div>
-                  </div>
-                   
-                </div>
+            </div>
+          </div>
+          <div class="card my-6" id="orders">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div
+                class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3"
+              >
+                <h6 class="text-white text-capitalize ps-3" id="userName">
+                  Abdelrahman Orders
+                </h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0" id="userOrders">
+                  <!--  -->
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card my-4" id="ordersProductsDetails">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div
+                class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3"
+              >
+                <h6 class="text-white text-capitalize ps-3">Order details</h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="container">
+                <div class="row justify-content-center" id="cards"></div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <section class="row">
-          
-        </section>
-        <div class="container">
-            <ul class="pagination pagination-default d-flex justify-content-center align-items-center" id="paginationContainer">
-              <li class="page-item">
-                <a class="page-link" href="javascript:;" aria-label="Previous">
-                  <span aria-hidden="true"><span class="material-icons">
-                      keyboard_arrow_left
-                    </span></span>
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link text-bold" href="javascript:;">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">3</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">4</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">5</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;" aria-label="Next">
-                  <span aria-hidden="true"><span class="material-icons">
-                      keyboard_arrow_right
-                    </span></span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        
+    <section class="row"></section>
+    <div class="container">
+      <ul
+        class="pagination pagination-default d-flex justify-content-center align-items-center"
+        id="paginationContainer"
+      >
+        <li class="page-item">
+          <a class="page-link" href="javascript:;" aria-label="Previous">
+            <span aria-hidden="true"
+              ><span class="material-icons"> keyboard_arrow_left </span></span
+            >
+          </a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link text-bold" href="javascript:;">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="javascript:;">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="javascript:;">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="javascript:;">4</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="javascript:;">5</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="javascript:;" aria-label="Next">
+            <span aria-hidden="true"
+              ><span class="material-icons"> keyboard_arrow_right </span></span
+            >
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>

@@ -4,7 +4,12 @@ async function getUserData() {
     );
     let res = await data.json();
     console.log(res);
+    if(res['notAuthorized']){
+        window.location = "http://localhost/php-project/user_pages/sign-in.html";
+      }
+      else{
     displayUserData(res);
+      }
 }
 
 function displayUserData(resData) {

@@ -8,6 +8,9 @@ let submit = document.getElementById("submit");
 let imageField = document.getElementById("image");
 let errorToastText = document.getElementById("errormsg");
 let errorToastBody = document.getElementById("dangerToast");
+let adminName = document.getElementById("adminName");
+let adminImage = document.getElementById("adminImage");
+let logout_Btn = document.getElementById("logoutBtn");
 
 console.log(errorToastText);
 ////////// GRABBING WARNING MSGS //////////////////////////
@@ -125,8 +128,13 @@ function showToast(data) {
   }, 4000);
 }
 
-//////// ON CLICK ///////////////////////////////////////
+//////////////////////// fill admin data ////////////////////////////
+function admin_data(array) {
+  adminName.innerText = array["admin"]["admin_name"];
+  adminImage.src = "../server/admin_images/" + array["admin"]["admin_pic"];
+}
 
+//////// ON CLICK ///////////////////////////////////////
 submit.addEventListener("click", (e) => {
   e.preventDefault();
 
@@ -170,6 +178,8 @@ submit.addEventListener("click", (e) => {
 
     // SENDING DATA /////////////////////////////
     send_data(formData);
+
+    alert("User" + " " + name + " " + "added successfuly");
   }
 });
 
@@ -189,3 +199,36 @@ async function send_data(formdata) {
     showToast(data);
   }
 }
+
+//////////////////////////////// LOUGOUT FUNCTION ////////////////////////////////////
+logout_Btn.addEventListener("click", async function () {
+  let formData = new FormData();
+  formData.append("logout", true);
+  let logoutSent = await fetch(
+    "http://localhost/php-project/server/Admin_Sign_In.php",
+    {
+      method: "post",
+      body: formData,
+    }
+  );
+  let logoutResponse = await logoutSent.json();
+  if (logoutResponse["loggedout"] == true) {
+    window.location = "http://localhost/php-project/admin/AdminSign-in.html";
+  }
+});
+
+async function get_admin(formdata) {
+  let response = await fetch(
+    "http://localhost/php-project/server/Admin_Add_User.php",
+    {
+      method: "POST",
+      body: formdata,
+    }
+  );
+  let data = await response.json();
+  console.log(data);
+  admin_data(data);
+}
+let formData = new FormData();
+formData.append("getAdmin", true);
+get_admin(formData);

@@ -86,7 +86,11 @@
             </ul>
             <ul class="navbar-nav d-lg-block d-none">
               <li class="nav-item">
-                <a class="btn btn-sm mb-0 me-1 bg-gradient-danger">Log Out</a>
+                <a
+                  class="btn btn-sm mb-0 me-1 bg-gradient-danger"
+                  id="logoutBtn"
+                  >Log Out</a
+                >
               </li>
             </ul>
           </div>
@@ -115,7 +119,7 @@
             <h6 class="font-weight-bolder mb-0">
               Welcome
               <span
-                id="user_name"
+                id="userName"
                 style="color: rgb(255, 77, 0); font-size: 20px"
               >
               </span>
@@ -159,7 +163,7 @@
                     src=""
                     alt="profile_image"
                     class="w-100 border-radius-lg h-75 shadow-sm"
-                    id="admin_image"
+                    id="userImage"
                   />
                 </div>
               </li>
@@ -194,67 +198,18 @@
                     class="form-control"
                     placeholder="Search in Our Menu"
                     type="text"
+                    id="searchInput"
                   />
                 </div>
               </div>
             </div>
             <div
               class="col-lg-12 col-md-12 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3"
-            >
-              <div class="nav-wrapper position-relative end-0">
-                <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                  <li class="nav-item">
-                    <a
-                      class="nav-link mb-0 px-0 py-1 active"
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="true"
-                    >
-                      <i class="material-icons text-lg position-relative"
-                        >coffee_maker</i
-                      >
-                      <span class="ms-1">Hot drinks</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link mb-0 px-0 py-1"
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="false"
-                    >
-                      <i class="material-icons text-lg position-relative"
-                        >restaurant</i
-                      >
-                      <span class="ms-1">Meals</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      class="nav-link mb-0 px-0 py-1"
-                      data-bs-toggle="tab"
-                      href="javascript:;"
-                      role="tab"
-                      aria-selected="false"
-                    >
-                      <i class="material-icons text-lg position-relative"
-                        >local_drink</i
-                      >
-                      <span class="ms-1">Cold drinks</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            ></div>
           </div>
           <div class="row">
             <div class="row">
               <div class="col-12 mt-4">
-                <div class="mb-5 ps-3">
-                  <h6 class="mb-1">Latest</h6>
-                </div>
                 <div class="row" id="productsZone">
                   <!-- here we can add products -->
                 </div>
@@ -265,8 +220,9 @@
           <div class="container mt-5">
             <ul
               class="pagination pagination-default d-flex justify-content-center align-items-center"
+              id="paginationContainer"
             >
-              <li class="page-item">
+              <!-- <li class="page-item">
                 <a class="page-link" href="javascript:;" aria-label="Previous">
                   <span aria-hidden="true"
                     ><span class="material-icons">
@@ -274,23 +230,15 @@
                     </span></span
                   >
                 </a>
-              </li>
-              <li class="page-item active">
+              </li> -->
+              <!-- <li class="page-item active">
                 <a class="page-link text-bold" href="javascript:;">1</a>
               </li>
               <li class="page-item">
                 <a class="page-link" href="javascript:;">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">3</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">4</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">5</a>
-              </li>
-              <li class="page-item">
+              </li> -->
+
+              <!-- <li class="page-item">
                 <a class="page-link" href="javascript:;" aria-label="Next">
                   <span aria-hidden="true"
                     ><span class="material-icons">
@@ -298,7 +246,7 @@
                     </span></span
                   >
                 </a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -334,7 +282,7 @@
       <div class="card shadow-lg">
         <div class="card-header pb-0 pt-3">
           <div class="float-start">
-            <h5 class="mt-3 mb-0">User's Cart</h5>
+            <h5 class="mt-3 mb-0"><span id="userField"> </span>'s Cart</h5>
             <p>Show and edit your Cart.</p>
           </div>
           <div class="float-end mt-4">
@@ -365,7 +313,7 @@
           <div class="mb-3 input-group input-group-outline">
             <textarea
               class="form-control fs-6 fw-bolder text-warning"
-              id="exampleFormControlTextarea1"
+              id="userNote"
               rows="3"
             ></textarea>
           </div>
@@ -375,14 +323,14 @@
           <div class="input-group input-group-outline">
             <select
               class="form-control fw-bolder text-warning"
-              id="user room"
+              id="userRoom"
               style="border-radius: 0 !important"
             >
-              <option>1</option>
+              <!-- <option>1</option>
               <option>2</option>
               <option selected="selected">3</option>
               <option>4</option>
-              <option>5</option>
+              <option>5</option> -->
             </select>
 
             <div class="row col-12 text-end mt-3">
@@ -442,9 +390,7 @@
                   ></i>
                 </div>
                 <hr class="horizontal light m-0" />
-                <div class="toast-body text-white">
-                  Hello, world! This is a notification message.
-                </div>
+                <div class="toast-body text-white">product added to cart.</div>
               </div>
               <div
                 class="toast fade hide p-2 mt-2 bg-white"
@@ -497,7 +443,6 @@
             <!-- change the data-target to change the message -->
             <button
               class="btn btn-success border-radius-bottom-end-0 border-radius-top-end-0 w-100 mt-6 toast-btn"
-              data-target="successToast"
               id="confirmBtn"
             >
               confirm
@@ -507,110 +452,11 @@
       </div>
     </div>
 
-    <!-- 
-    <div class="position-fixed bottom-1 end-1 z-index-2">
-      <div
-        class="toast fade hide p-2 bg-white"
-        role="alert"
-        aria-live="assertive"
-        id="successToast"
-        aria-atomic="true"
-      >
-        <div class="toast-header border-0">
-          <i class="material-icons text-success me-2"> check </i>
-          <span class="me-auto font-weight-bold">Material Dashboard </span>
-          <small class="text-body">11 mins ago</small>
-          <i
-            class="fas fa-times text-md ms-3 cursor-pointer"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></i>
-        </div>
-        <hr class="horizontal dark m-0" />
-        <div class="toast-body">
-          Hello, world! This is a notification message.
-        </div>
-      </div>
-      <div
-        class="toast fade hide p-2 mt-2 bg-gradient-info"
-        role="alert"
-        aria-live="assertive"
-        id="infoToast"
-        aria-atomic="true"
-      >
-        <div class="toast-header bg-transparent border-0">
-          <i class="material-icons text-white me-2"> notifications </i>
-          <span class="me-auto text-white font-weight-bold"
-            >Material Dashboard
-          </span>
-          <small class="text-white">11 mins ago</small>
-          <i
-            class="fas fa-times text-md text-white ms-3 cursor-pointer"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></i>
-        </div>
-        <hr class="horizontal light m-0" />
-        <div class="toast-body text-white">
-          Hello, world! This is a notification message.
-        </div>
-      </div>
-      <div
-        class="toast fade hide p-2 mt-2 bg-white"
-        role="alert"
-        aria-live="assertive"
-        id="warningToast"
-        aria-atomic="true"
-      >
-        <div class="toast-header border-0">
-          <i class="material-icons text-warning me-2"> travel_explore </i>
-          <span class="me-auto font-weight-bold">Material Dashboard </span>
-          <small class="text-body">11 mins ago</small>
-          <i
-            class="fas fa-times text-md ms-3 cursor-pointer"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></i>
-        </div>
-        <hr class="horizontal dark m-0" />
-        <div class="toast-body">
-          Hello, world! This is a notification message.
-        </div>
-      </div>
-      <div
-        class="toast fade hide p-2 mt-2 bg-white"
-        role="alert"
-        aria-live="assertive"
-        id="dangerToast"
-        aria-atomic="true"
-      >
-        <div class="toast-header border-0">
-          <i class="material-icons text-danger me-2"> campaign </i>
-          <span class="me-auto text-gradient text-danger font-weight-bold"
-            >Material Dashboard
-          </span>
-          <small class="text-body">11 mins ago</small>
-          <i
-            class="fas fa-times text-md ms-3 cursor-pointer"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-          ></i>
-        </div>
-        <hr class="horizontal dark m-0" />
-        <div class="toast-body">
-          Hello, world! This is a notification message.
-        </div>
-      </div>
-    </div>
-
- -->
-
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/material-dashboard.js"></script>
     <!--   Logic JS Files   -->
     <script src="../assets/js/logic/userhome.js"></script>
-    <script src="../assets/js/logic/userSession.js"></script>
   </body>
 </html>

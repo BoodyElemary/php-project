@@ -33,21 +33,22 @@
       rel="stylesheet"
     />
     <style>
-      #orders, #ordersProductsDetails{
-          display: none !important;
+      #orders,
+      #ordersProductsDetails {
+        display: none !important;
+      }
+      .orderCard {
+        width: 240px;
+      }
+      @media (min-width: 1000px) {
+        .date {
+          width: 40%;
         }
-        .orderCard{
-          width: 240px;
+        #search {
+          height: 50px;
+          margin-top: 30px;
         }
-        @media(min-width:1000px){
-          .date{
-            width: 40%;
-          }
-          #search{
-            height: 50px;
-            margin-top: 30px;
-          }
-        }
+      }
     </style>
   </head>
 
@@ -104,7 +105,11 @@
             </ul>
             <ul class="navbar-nav d-lg-block d-none">
               <li class="nav-item">
-                <a class="btn btn-sm mb-0 me-1 bg-gradient-danger">Log Out</a>
+                <a
+                  class="btn btn-sm mb-0 me-1 bg-gradient-danger"
+                  id="logoutBtn"
+                  >Log Out</a
+                >
               </li>
             </ul>
           </div>
@@ -130,7 +135,9 @@
                 My orders
               </li>
             </ol>
-            <h6 class="font-weight-bolder mb-0" id="user_name">Welcome UserName</h6>
+            <h6 class="font-weight-bolder mb-0" id="user_name">
+              Welcome UserName
+            </h6>
           </nav>
           <div
             class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -153,7 +160,8 @@
               </li>
               <li class="col-auto">
                 <div class="avatar avatar-xl position-relative">
-                  <img id="user_image"
+                  <img
+                    id="user_image"
                     src="https://png.pngtree.com/element_our/20190604/ourmid/pngtree-user-avatar-boy-image_1482937.jpg"
                     alt="profile_image"
                     class="w-100 border-radius-lg h-75 shadow-sm"
@@ -173,7 +181,7 @@
           </div>
           <div class="input-group input-group-static my-3 date">
             <label>Date To</label>
-            <input type="date" class="form-control" id="dateTo"/>
+            <input type="date" class="form-control" id="dateTo" />
           </div>
 
           <button class="btn btn-primary" id="search">Search</button>
@@ -328,14 +336,14 @@
                       </tr>
                     </tbody>
                   </table>
-                  
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="container">
-          <ul id="paginationContainer"
+          <ul
+            id="paginationContainer"
             class="pagination pagination-default d-flex justify-content-center align-items-center"
           >
             <li class="page-item">
@@ -375,16 +383,16 @@
         </div>
         <div class="card my-4" id="ordersProductsDetails">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <div
+              class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+            >
               <h6 class="text-white text-capitalize ps-3">Order details</h6>
             </div>
           </div>
-          <div class="card-body px-0 pb-2" >
+          <div class="card-body px-0 pb-2">
             <div class="container">
-              <div class="row justify-content-center" id="cards">
-              </div>
+              <div class="row justify-content-center" id="cards"></div>
             </div>
-             
           </div>
         </div>
         <footer class="footer py-4">

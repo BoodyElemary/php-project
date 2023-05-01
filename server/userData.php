@@ -1,7 +1,7 @@
 <?php
 require("./env.php");
 session_start();
-if (!array_key_exists("user",$_SESSION))
+if (!array_key_exists("id",$_SESSION))
 {  
     $notAuthorized = [
         "notAuthorized"=>true
@@ -9,7 +9,7 @@ if (!array_key_exists("user",$_SESSION))
     echo json_encode($notAuthorized);
 
 } else {
-    $u_Id = $_SESSION['user'];
+    $u_Id = $_SESSION['id'];
     $query = "SELECT user_name ,user_pic FROM  users where user_id = $u_Id";
 
     $sql = $conn->prepare($query);
